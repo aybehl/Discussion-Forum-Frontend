@@ -6,7 +6,7 @@ const Footer = () => (
       display: 'flex',
       justifyContent: 'space-between',
       borderTop: '1px solid',
-      borderColor: 'divider',
+      borderColor: 'gray.darker',
       mx: 8,
       py: 4,
       mt: 'auto'

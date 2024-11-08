@@ -8,7 +8,7 @@ const Header = () => (
       py: 2,
       mx: 8,
       borderBottom: '1px solid',
-      borderColor: 'divider',
+      borderColor: 'gray.darker',
     }}
   >
     <img src="/logo.svg" alt="Fit.Connect Logo" style={{ marginRight: 8 }} />

@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#F68037'
+      main: '#FF6600'
     },
     secondary: {
       main: '#393C43',
@@ -45,6 +45,15 @@ const theme = createTheme({
     caption: {
       fontSize: '0.75rem',
       color: '#666',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none', // Removes uppercase for all buttons globally
+        },
+      },
     },
   },
 });
