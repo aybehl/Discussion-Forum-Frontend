@@ -1,26 +1,32 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 const CustomButton = ({
   variant,
-  color,
+  textColor,
+  bgColor,
   content,
   padding,
   borderRadius,
   size,
   onClick,
+  textVariant
 }) => {
   return (
     <Button
       variant={variant}
-      color={color}
       size={size}
       sx={{
         padding,
         borderRadius,
+        backgroundColor: bgColor,
+        color: textColor,
+        '&:hover': {
+          backgroundColor: `${bgColor}CC`,
+        }
       }}
       onClick={onClick}
     >
-      {content}
+      <Typography variant={textVariant}>{content}</Typography>
     </Button>
   );
 };
