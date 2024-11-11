@@ -18,18 +18,20 @@ const SignupPage = () => {
     try {
       const response = await signup(userData);
       console.log("Signup successful:", response);
+      
       if(response.status === 'SUCCESS' && response.statusCode === 201){
+        sessionStorage.setItem('jwtToken', response.data.token);
+        sessionStorage.setItem('userId', response.data.userId);
         navigate('/profile-setup');
       } else if(response.status === 'ERROR'){
         setErrorMessage(response.message);
       }
-      navigate('/');
     } catch(error){
       console.error("Signup failed:", error);
+      
       if (error.response) {
         setErrorMessage(error.response.data.message);
       } else {
-        // Show generic error message for other errors
         setErrorMessage("An unexpected error occurred. Please try again.");
       }
     }

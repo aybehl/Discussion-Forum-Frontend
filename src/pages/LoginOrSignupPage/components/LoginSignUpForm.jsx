@@ -28,7 +28,6 @@ const LoginSignUpForm = ({ onLoginSignup, buttonText, isLogin }) => {
 
   const handleFormSubmission = (e) => {
     e.preventDefault();
-    console.log("formdata -", formData);
     onLoginSignup(formData);
   };
 
