@@ -9,7 +9,8 @@ const CustomButton = ({
   borderRadius,
   size,
   onClick,
-  textVariant
+  textVariant,
+  type
 }) => {
   return (
     <Button
@@ -25,6 +26,7 @@ const CustomButton = ({
         }
       }}
       onClick={onClick}
+      type={type}
     >
       <Typography variant={textVariant}>{content}</Typography>
     </Button>

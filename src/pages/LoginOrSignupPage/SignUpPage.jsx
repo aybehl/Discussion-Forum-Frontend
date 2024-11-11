@@ -5,10 +5,34 @@ import LoginSignUpForm from "./components/LoginSignUpForm";
 import LoginSignUpLink from "./components/LoginSignUpLink";
 import DividerWithText from "./components/DividerWithText";
 import GoogleButton from "./components/GoogleButton";
+import { signup } from "../../api/auth";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ErrorMessage from "./components/ErrorMessage";
 
 const SignupPage = () => {
-  const handleSignup = () => {
-    // Handle sign-up logic
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSignup = async (userData) => {
+    try {
+      const response = await signup(userData);
+      console.log("Signup successful:", response);
+      if(response.status === 'SUCCESS' && response.statusCode === 201){
+        navigate('/profile-setup');
+      } else if(response.status === 'ERROR'){
+        setErrorMessage(response.message);
+      }
+      navigate('/');
+    } catch(error){
+      console.error("Signup failed:", error);
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        // Show generic error message for other errors
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   const handleGoogleSignup = () => {
@@ -22,10 +46,13 @@ const SignupPage = () => {
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
         <HeadingSection heading={'Hi friend!'} subHeading={'Create an account with us to get started'}/>
-        <LoginSignUpForm onLoginSignup={handleSignup} buttonText={'Sign Up'}/>
+        <LoginSignUpForm onLoginSignup={handleSignup} buttonText={'Sign Up'} isLogin={false}/>
         <LoginSignUpLink text={'Log in'} link={'/login'}/>
+        {
+          errorMessage && <ErrorMessage message={errorMessage}/>
+        }
         <DividerWithText text="OR" />
-        {/* <GoogleButton onGoogleButtonClick={handleGoogleSignup} text={'Sign Up with Google'}/> */}
+        <GoogleButton onGoogleButtonClick={handleGoogleSignup} text={'Sign Up with Google'}/>
       </Box>
     </Box>
   );
