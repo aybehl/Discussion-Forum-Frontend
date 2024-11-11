@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import BackButton from "./components/BackButton";
-import HeadingSection from "./components/HeadingSection";
+import HeadingSection from "./../../components/HeadingSection";
 import LoginSignUpForm from "./components/LoginSignUpForm";
 import LoginSignUpLink from "./components/LoginSignUpLink";
 import DividerWithText from "./components/DividerWithText";
@@ -22,13 +22,14 @@ const SignupPage = () => {
       if(response.status === 'SUCCESS' && response.statusCode === 201){
         sessionStorage.setItem('jwtToken', response.data.token);
         sessionStorage.setItem('userId', response.data.userId);
-        navigate('/profile-setup');
+        sessionStorage.setItem('emailId', userData.email);
+        navigate('/signup/profile-setup');
       } else if(response.status === 'ERROR'){
         setErrorMessage(response.message);
       }
     } catch(error){
       console.error("Signup failed:", error);
-      
+
       if (error.response) {
         setErrorMessage(error.response.data.message);
       } else {

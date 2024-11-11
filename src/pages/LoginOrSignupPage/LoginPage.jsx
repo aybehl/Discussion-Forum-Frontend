@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import BackButton from "./components/BackButton";
-import HeadingSection from "./components/HeadingSection";
+import HeadingSection from "./../../components/HeadingSection";
 import LoginSignUpForm from "./components/LoginSignUpForm";
 import LoginSignUpLink from "./components/LoginSignUpLink";
 import DividerWithText from "./components/DividerWithText";

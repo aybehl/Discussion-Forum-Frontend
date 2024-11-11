@@ -1,0 +1,37 @@
+import { TextField, Typography, Box } from "@mui/material";
+
+const BioInput = ({ onChange }) => {
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 0, alignItems: "flex-start", width: "100%"}}>
+      <Typography variant="body2" sx={{ minWidth: "5rem", textAlign: "left" }}>
+        Your Bio
+      </Typography>
+      <TextField
+        placeholder="Share a little about yourself – fitness goals, fun facts, or favorite workouts!"
+        multiline
+        rows={4}
+        fullWidth
+        variant="outlined"
+        onChange={(e) => onChange(e.target.value)}
+        sx={{
+          "&:hover": {
+            cursor: "pointer", // Adds pointer cursor on hover
+          },
+          "& .MuiOutlinedInput-root": {
+            padding: "0 0.75rem", // Custom padding for the input field
+            marginTop: "0.5rem"
+          },
+          "& .MuiInputBase-input": {
+            fontSize: "1rem", // Font size for input text
+            padding: "0.5rem 0", // Additional padding inside the input
+          },
+          "& .MuiInputBase-input::placeholder": {
+            fontSize: "0.9rem", // Placeholder font size
+          },
+        }}
+      />
+    </Box>
+  );
+};
+
+export default BioInput;
