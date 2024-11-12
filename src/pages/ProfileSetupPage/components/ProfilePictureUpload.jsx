@@ -1,12 +1,15 @@
 import { useTheme } from "@emotion/react";
 import { Box, TextField, InputAdornment, IconButton, Button, Typography, Avatar } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt"; // Import camera icon
+import FaceIcon from '@mui/icons-material/Face';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useRef, useState } from "react";
 
 const ProfilePictureUpload = ({ onUpload }) => { 
   const theme = useTheme();
   const fileInputRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [fileName, setFileName] = useState("");
 
   const handleFileChange = (event) => {
 
@@ -14,17 +17,21 @@ const ProfilePictureUpload = ({ onUpload }) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
+      setFileName(file.name);
       onUpload(file);
     }
   };
 
-  const handleIconClick = () => {
+  const handleCameraIconClick = () => {
     fileInputRef.current.click(); // Trigger click on hidden file input
+  };
+
+  const handleDeleteIconClick = () => {
+    setImage(null);
   };
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "2rem", width: "100%" }}>
-      <Box sx={{ width: 150, height: 150, borderRadius: "50%", backgroundColor: `${theme.palette.primary.main}99`, mb: 1 }} />
       <Avatar
         src={image || undefined} // Display image if available, otherwise fallback to initials
         alt="Profile Picture"
@@ -32,24 +39,36 @@ const ProfilePictureUpload = ({ onUpload }) => {
           width: 150,
           height: 150,
           mb: 1,
-          backgroundColor: image ? "transparent" : theme.palette.primary.main, // Use primary color if no image
+          backgroundColor: image ? "transparent" : `${theme.palette.primary.main}`,
           color: "white",
           fontSize: "2rem",
         }}
       >
-        {!image && "A"} {/* Display "A" or any other placeholder initials when no image */}
+        {!image && <FaceIcon sx={{ fontSize: "4rem"}}/>}
       </Avatar>
+
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0" }}>
         <TextField
         placeholder="Upload your best look"
         fullWidth
         variant="outlined"
+        value={fileName}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleIconClick}>
-                <CameraAltIcon sx={{ fontSize: "1.2rem"}}/>
+            <InputAdornment position="end" sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "0"
+            }}>
+              <IconButton onClick={handleCameraIconClick}>
+                <CameraAltIcon sx={{ fontSize: "1rem"}}/>
               </IconButton>
+              {image && (
+              <IconButton onClick={handleDeleteIconClick}>
+                  <DeleteIcon sx={{ fontSize: "1rem"}}/>
+                </IconButton>
+              )}
             </InputAdornment>
           ),
         }}
@@ -61,7 +80,7 @@ const ProfilePictureUpload = ({ onUpload }) => {
             },
           },
           "& .MuiInputBase-input": {
-            fontSize: "1rem", // Font size for input text
+            fontSize: "0.8rem", // Font size for input text
             padding: "0.5rem 0 0.5rem 0.5rem", // Additional padding inside the input
           },
           "& .MuiInputBase-input::placeholder": {
@@ -76,14 +95,14 @@ const ProfilePictureUpload = ({ onUpload }) => {
         ref={fileInputRef}
         hidden // Hidden input field
       />
-        <Typography variant="caption" display="block">
+        {/* <Typography variant="caption" display="block">
           <p style={{margin: "0"}}>
           At least 150x150 px recommended.
           </p>
           <p style={{margin: "0"}}>
           JPG or PNG is allowed.
           </p>
-        </Typography>
+        </Typography> */}
       </Box>
     </Box>
   );
