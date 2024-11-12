@@ -22,6 +22,7 @@ const LoginPage = () => {
       if(response.status === 'SUCCESS' && response.statusCode === 200){
         sessionStorage.setItem('jwtToken', response.data.token);
         sessionStorage.setItem('userId', response.data.userId);
+        sessionStorage.setItem('emailId', userData.email);
         navigate('/home');
       } else if(response.status === 'ERROR'){
         setErrorMessage(response.message);

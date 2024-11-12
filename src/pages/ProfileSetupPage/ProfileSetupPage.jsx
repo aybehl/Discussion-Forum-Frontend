@@ -11,11 +11,12 @@ import { useTheme } from "@emotion/react";
 
 const ProfileSetupPage = () => {
   const theme = useTheme();
+
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
     username: "",
-    email: sessionStorage.getItem('emailId') !== null ? sessionStorage.getItem('emailId'): "Hi",
+    email: sessionStorage.getItem('emailId') !== null ? sessionStorage.getItem('emailId'): "",
     bio: "",
     profilePicture: null,
   });
@@ -87,11 +88,13 @@ const ProfileSetupPage = () => {
           <TextInput
             label="First Name"
             placeholder="Your first name"
+            value={profileData.firstName}
             onChange={(value) => handleInputChange("firstName", value)}
           />
           <TextInput
             label="Last Name"
             placeholder="Your last name"
+            value={profileData.lastName}
             onChange={(value) => handleInputChange("lastName", value)}
           />
         </Box>
@@ -110,12 +113,14 @@ const ProfileSetupPage = () => {
             placeholder="Choose a cool username"
             onChange={(value) => handleInputChange("username", value)}
             required={true}
+            value={profileData.username}
           />
           <TextInput
             label="Email Id"
             placeholder="Your email"
             onChange={(value) => handleInputChange("email", value)}
             disabled={true}
+            value={profileData.email}
           />
         </Box>
         <Divider sx={{ width: "100%"}} /> 

@@ -1,6 +1,9 @@
+import { useTheme } from "@emotion/react";
 import { TextField, Typography, Box } from "@mui/material";
 
 const BioInput = ({ onChange }) => {
+  const theme = useTheme();
+  
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 0, alignItems: "flex-start", width: "100%"}}>
       <Typography variant="body2" sx={{ minWidth: "5rem", textAlign: "left" }}>
@@ -19,14 +22,17 @@ const BioInput = ({ onChange }) => {
           },
           "& .MuiOutlinedInput-root": {
             padding: "0 0.75rem", // Custom padding for the input field
-            marginTop: "0.5rem"
+            marginTop: "0.5rem",
+            "&:hover fieldset": {
+              borderColor: theme.palette.primary.main, // Hover color from theme
+            },
           },
           "& .MuiInputBase-input": {
             fontSize: "1rem", // Font size for input text
             padding: "0.5rem 0", // Additional padding inside the input
           },
           "& .MuiInputBase-input::placeholder": {
-            fontSize: "0.9rem", // Placeholder font size
+            fontSize: "0.8rem", // Placeholder font size
           },
         }}
       />
