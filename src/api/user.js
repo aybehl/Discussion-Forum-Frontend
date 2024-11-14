@@ -1,3 +1,5 @@
+import axiosInstance from './axiosInstance';
+
 const apiUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 
 export const editUserProfile = async (userId, userData) => {
@@ -27,4 +29,14 @@ export const editUserProfile = async (userId, userData) => {
   }
 
   return await response.json();
+};
+
+export const getUserProfile = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/api/users/${userId}/profile`);
+    return response.data;
+  } catch (error) {
+    console.error("Error occurred when calling /api/users/{userId}/profile:", error);
+    throw error;
+  }
 };

@@ -9,10 +9,12 @@ import { editUserProfile } from "../../api/user";
 import CustomButton from "../../components/CustomButton";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserProvider";
 
 const ProfileSetupPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { login } = useUser();
 
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -36,6 +38,7 @@ const ProfileSetupPage = () => {
       const response = await editUserProfile(userId, profileData);
 
       if (response.status === "SUCCESS" && response.statusCode === 200) {
+        login(sessionStorage.getItem("jwtToken"));
         navigate("/home");
       } else if (response.status === "ERROR") {
         setErrorMessage(response.message);

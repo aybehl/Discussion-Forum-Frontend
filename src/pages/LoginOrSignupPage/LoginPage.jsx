@@ -6,21 +6,22 @@ import LoginSignUpLink from "./components/LoginSignUpLink";
 import DividerWithText from "./components/DividerWithText";
 import GoogleButton from "./components/GoogleButton";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api/auth";
 import { useState } from "react";
 import ErrorMessage from "./components/ErrorMessage";
+import { useUser } from "../../contexts/UserProvider"; 
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useUser();
 
   const handleLogin = async (userData) => {
     try {
       const response = await login(userData);
-      console.log("Login successful:", response);
 
       if(response.status === 'SUCCESS' && response.statusCode === 200){
-        sessionStorage.setItem('jwtToken', response.data.token);
+        login(response.data.token);
+        //sessionStorage.setItem('jwtToken', response.data.token);
         sessionStorage.setItem('userId', response.data.userId);
         sessionStorage.setItem('emailId', userData.email);
         navigate('/home');
