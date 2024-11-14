@@ -14,8 +14,12 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/questions" element={<HomePage />} />
           <Route path="/signup/profile-setup" element={<ProfileSetupPage />} />
+
+          {/* <Route path="/posts" element={<PostsPage />} />
+          <Route path="/bookmarks" element={<BookmarksPage />} />
+          <Route path="/mentions" element={<MentionsPage />} /> */}
         </Routes>
       </Router>
     </UserProvider>

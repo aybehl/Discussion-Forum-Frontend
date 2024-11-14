@@ -14,7 +14,7 @@ const ActionButtons = () => {
   };
 
   const handleGuestAccess = () => {
-    navigate("/home");
+    navigate("/questions");
   };
 
   return (

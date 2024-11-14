@@ -24,7 +24,7 @@ const LoginPage = () => {
         //sessionStorage.setItem('jwtToken', response.data.token);
         sessionStorage.setItem('userId', response.data.userId);
         sessionStorage.setItem('emailId', userData.email);
-        navigate('/home');
+        navigate('/questions');
       } else if(response.status === 'ERROR'){
         setErrorMessage(response.message);
       }

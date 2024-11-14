@@ -39,7 +39,7 @@ const ProfileSetupPage = () => {
 
       if (response.status === "SUCCESS" && response.statusCode === 200) {
         login(sessionStorage.getItem("jwtToken"));
-        navigate("/home");
+        navigate("/questions");
       } else if (response.status === "ERROR") {
         setErrorMessage(response.message);
       }
