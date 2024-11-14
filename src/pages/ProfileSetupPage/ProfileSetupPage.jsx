@@ -8,14 +8,16 @@ import ErrorMessage from "./components/ErrorMessage"; // Optional
 import { editUserProfile } from "../../api/user";
 import CustomButton from "../../components/CustomButton";
 import { useTheme } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSetupPage = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
-    username: "",
+    userName: "",
     email: sessionStorage.getItem('emailId') !== null ? sessionStorage.getItem('emailId'): "",
     bio: "",
     profilePicture: null,
@@ -27,11 +29,12 @@ const ProfileSetupPage = () => {
     setProfileData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      // Submit profile data to API
-      const response = await editUserProfile(profileData);
-      console.log("Profile setup successful:", response);
+      const userId = sessionStorage.getItem('userId');
+      const response = await editUserProfile(userId, profileData);
+
       if (response.status === "SUCCESS" && response.statusCode === 200) {
         navigate("/home");
       } else if (response.status === "ERROR") {
@@ -111,15 +114,15 @@ const ProfileSetupPage = () => {
           <TextInput
             label="User Name*"
             placeholder="Choose a cool username"
-            onChange={(value) => handleInputChange("username", value)}
+            onChange={(value) => handleInputChange("userName", value)}
             required={true}
-            value={profileData.username}
+            value={profileData.userName}
           />
           <TextInput
             label="Email Id"
             placeholder="Your email"
             onChange={(value) => handleInputChange("email", value)}
-            disabled={true}
+            disabled={(profileData.email !== "") ? true: false}
             value={profileData.email}
           />
         </Box>
