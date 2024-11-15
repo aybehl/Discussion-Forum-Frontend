@@ -1,4 +1,3 @@
-// src/components/Sidebar/SidebarItem.jsx
 import React from "react";
 import { ListItemButton, ListItemText } from "@mui/material";
 import { NavLink } from "react-router-dom";

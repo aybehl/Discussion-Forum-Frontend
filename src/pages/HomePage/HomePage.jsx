@@ -9,8 +9,7 @@ const HomePage = () => {
   return (
     <Box sx={{ 
       display: 'flex', 
-      flexDirection: 'column', 
-      minHeight: '100vh',
+      flexDirection: 'column',
       background: `linear-gradient(135deg, ${theme.palette.gray.darkest} 30%, ${theme.palette.common.black} 90%)`,
       color: 'common.white',
       }}>

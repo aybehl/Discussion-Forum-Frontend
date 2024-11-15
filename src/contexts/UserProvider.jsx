@@ -1,6 +1,4 @@
-// src/contexts/UserContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { getUserProfile } from "../api/user";
 
 const UserContext = createContext();
@@ -22,6 +20,7 @@ export const UserProvider = ({ children }) => {
           console.error("Error fetching user profile:", error);
           setUser(null);
           setIsAuthenticated(false); // Log out user on error (e.g., token expired)
+          throw error;
         }
       }
     };
