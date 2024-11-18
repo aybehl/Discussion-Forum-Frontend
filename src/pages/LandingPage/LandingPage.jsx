@@ -17,7 +17,7 @@ const LandingPage = () => {
       background: `linear-gradient(135deg, ${theme.palette.gray.darkest} 30%, ${theme.palette.common.black} 90%)`,
       color: 'common.white',
       }}>
-      <Header />
+      <Header variant="landing"/>
       <Box
         sx={{
           display: 'flex',

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ErrorMessage from "./components/ErrorMessage";
 import { useUser } from "../../contexts/UserProvider"; 
+import { logIn } from "../../api/auth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -17,13 +18,13 @@ const LoginPage = () => {
 
   const handleLogin = async (userData) => {
     try {
-      const response = await login(userData);
+      const response = await logIn(userData);
 
       if(response.status === 'SUCCESS' && response.statusCode === 200){
-        login(response.data.token);
-        //sessionStorage.setItem('jwtToken', response.data.token);
         sessionStorage.setItem('userId', response.data.userId);
         sessionStorage.setItem('emailId', userData.email);
+
+        await login(response.data.token);
         navigate('/questions');
       } else if(response.status === 'ERROR'){
         setErrorMessage(response.message);

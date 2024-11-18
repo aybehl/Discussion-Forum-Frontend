@@ -12,7 +12,11 @@ const axiosInstance = axios.create({
 // Request Interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // You can add tokens or any other headers here
+    const token = sessionStorage.getItem("jwtToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
     console.log('Request sent:', config);
     return config;
   },

@@ -8,20 +8,25 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(!!sessionStorage.getItem("jwtToken"));
+  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (isAuthenticated) {
+      const userId = sessionStorage.getItem("userId");
+      if (isAuthenticated && userId) {
+        setLoading(true);
         try {
-          const userId = sessionStorage.getItem("userId");
           const response = await getUserProfile(userId);
-          setUser(response);
+          setUser(response.data);
         } catch (error) {
           console.error("Error fetching user profile:", error);
-          setUser(null);
-          setIsAuthenticated(false); // Log out user on error (e.g., token expired)
+          logout();
           throw error;
+        } finally {
+          setLoading(false); // Done loading
         }
+      } else {
+        setLoading(false);
       }
     };
 
@@ -35,12 +40,13 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     sessionStorage.removeItem("jwtToken");
+    sessionStorage.removeItem("userId");
     setUser(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, isAuthenticated, loading }}>
       {children}
     </UserContext.Provider>
   );

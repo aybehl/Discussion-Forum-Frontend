@@ -10,7 +10,7 @@ export const signup = async (userData) => {
   }
 };
 
-export const login = async (userData) => {
+export const logIn = async (userData) => {
   try {
     const response = await axiosInstance.post('/api/auth/login', userData);
     return response.data;
