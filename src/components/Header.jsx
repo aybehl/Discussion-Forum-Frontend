@@ -25,8 +25,8 @@ const Header = ({ variant = "default" }) => {
 
   const avatarContent = isGuest
     ? { children: "G" }
-    : user.profilePicture
-    ? { src: user.profilePicture }
+    : user.profilePic
+    ? { src: user.profilePic }
     : { children: user.userName?.charAt(0).toUpperCase() };
 
   console.log("isGuest - ", isGuest);
@@ -67,30 +67,8 @@ const Header = ({ variant = "default" }) => {
           }}
         >
           <Link
-            href={isGuest ? "#" : "/profile"}
-            underline="none"
-            sx={{
-              color: "common.white", // Inherit color from parent, so it doesn’t look like a link
-              cursor: "pointer",
-              textDecoration: "none", // Ensures no underline or link styling
-              "&:hover": {
-                color: "primary.main",
-                textDecoration: "none", // Remove underline on hover
-              },
-              "&:active": {
-                color: "inherit", // Prevent color change on click
-                textDecoration: "none",
-              },
-              "&:focus": {
-                color: "inherit", // Prevent color change on focus
-                outline: "none", // Remove focus outline if any
-                textDecoration: "none",
-              },
-              "&:visited": {
-                color: "inherit", // Prevent color change on visited
-                textDecoration: "none",
-              },
-            }}
+            to={isGuest ? "#" : "/profile"}
+            style={{ textDecoration: "none" }}
           >
             <Box
               sx={{
@@ -99,15 +77,28 @@ const Header = ({ variant = "default" }) => {
                 gap: "0.5rem",
               }}
             >
-              <Avatar {...avatarContent} alt="User Avatar" />
+              <Avatar
+                {...avatarContent}
+                alt="User Avatar"
+                sx={{
+                  width: 50,
+                  height: 50,
+                  backgroundColor: isGuest
+                    ? "gray.main" // Background color for guest
+                    : !user.profilePic
+                    ? "primary.main" // Background color if profile picture doesn't exist
+                    : "transparent", // No background color for existing profile picture
+                  color: isGuest || !user.profilePic ? "common.white" : "inherit", // Text color for guest or no profile picture
+                }}
+              />
               <Typography
-                variant="body2"
+                variant="body1"
                 sx={{
                   color: "common.white",
                   textDecoration: "none",
                 }}
               >
-                {isGuest ? "Guest User" : user.userName}
+                {isGuest ? "Guest User" : `@${user.userName}`}
               </Typography>
             </Box>
           </Link>

@@ -38,7 +38,7 @@ const ProfileSetupPage = () => {
       const response = await editUserProfile(userId, profileData);
 
       if (response.status === "SUCCESS" && response.statusCode === 200) {
-        login(sessionStorage.getItem("jwtToken"));
+        await login(sessionStorage.getItem("jwtToken"));
         navigate("/questions");
       } else if (response.status === "ERROR") {
         setErrorMessage(response.message);

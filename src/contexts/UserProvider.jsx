@@ -33,16 +33,27 @@ export const UserProvider = ({ children }) => {
     fetchUserProfile();
   }, [isAuthenticated]); // Refetch user profile if authentication state changes
 
-  const login = (token) => {
+  const login = async (token) => {
     sessionStorage.setItem("jwtToken", token);
     setIsAuthenticated(true);
+    setLoading(true); // Trigger loading until user profile is fetched
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const response = await getUserProfile(userId);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error during login profile fetch:", error);
+      logout(); // Handle error by clearing session
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
-    sessionStorage.removeItem("jwtToken");
-    sessionStorage.removeItem("userId");
+    sessionStorage.clear();
     setUser(null);
     setIsAuthenticated(false);
+    setLoading(false);
   };
 
   return (
