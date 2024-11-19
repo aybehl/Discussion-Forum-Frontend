@@ -9,7 +9,7 @@ export const TagsProvider = ({ children }) => {
     const fetchTags = async () => {
       try {
         const response = await getAllTags();
-        setTags(response);
+        setTags(response.data);
       } catch(error) {
         console.error("Error fetching tags:", error);
         throw error;

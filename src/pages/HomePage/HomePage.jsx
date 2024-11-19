@@ -2,6 +2,7 @@ import Header from "../../components/Header";
 import { Box } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import Sidebar from "../../components/SideBar/SideBar";
+import QuestionsList from "./components/QuestionsList";
 
 const HomePage = () => {
   
@@ -21,6 +22,7 @@ const HomePage = () => {
         }}
       >
         <Sidebar/>
+        <QuestionsList/>
       </Box>
     </Box>
   );

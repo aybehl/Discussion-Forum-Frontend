@@ -28,9 +28,7 @@ const Header = ({ variant = "default" }) => {
     : user.profilePic
     ? { src: user.profilePic }
     : { children: user.userName?.charAt(0).toUpperCase() };
-
-  console.log("isGuest - ", isGuest);
-  console.log("avatarContent - ", avatarContent);
+  
   return (
     <Box
       sx={{

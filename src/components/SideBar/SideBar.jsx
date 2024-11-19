@@ -42,7 +42,7 @@ const Sidebar = () => {
         borderColor: "gray.darker",
         height: "100vh",
         overflowY: "auto",
-        mx: 8,
+        ml: 8,
       }}
     >
       <List sx={{ padding: "0" }}>
