@@ -38,8 +38,6 @@ const Sidebar = () => {
       sx={{
         width: "20%",
         padding: "0.5rem 0",
-        borderRight: "1px solid",
-        borderColor: "gray.darker",
         height: "100vh",
         overflowY: "auto",
         ml: 8,
@@ -70,7 +68,7 @@ const Sidebar = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "0.25rem",
-                      padding: "0.5rem 0.75rem",
+                      padding: "0.24rem 0.5rem",
                       borderRadius: "0.5rem",
                       fontSize: "0.875rem",
                       backgroundColor: theme.palette.primary.main,
@@ -84,7 +82,7 @@ const Sidebar = () => {
                     }}
                   >
                     <Typography
-                      variant="body2"
+                      variant="caption"
                       sx={{
                         fontWeight: "500",
                         color: theme.palette.common.white,

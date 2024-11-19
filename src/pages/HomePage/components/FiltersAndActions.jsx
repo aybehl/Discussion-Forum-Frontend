@@ -63,12 +63,12 @@ const FiltersAndActions = ({ onFilterChange, selectedTag }) => {
           }}
         >
           {/* Default option */}
-          <MenuItem key={"default"} value="" disabled>
+          <MenuItem key={"default"} value="">
             Tags
           </MenuItem>
          
           {tags.map((tag) => (
-            <MenuItem key={tag.tagId} value={tag.tagName}>
+            <MenuItem key={tag.tagId} value={tag}>
               {tag.tagName}
             </MenuItem>
           ))}
