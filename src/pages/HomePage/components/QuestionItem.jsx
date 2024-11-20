@@ -25,11 +25,8 @@ const QuestionItem = ({ question }) => {
         "&:hover": {
           background: `linear-gradient(135deg, ${theme.palette.common.black} 30%, ${theme.palette.gray.darkest} 90%)`,
           color: "primary.main", // Hover color
+          transition: "background 1s"
         },
-        // "&:active": {
-        //   backgroundColor: "primary.light",
-        //   color: "primary.dark", // Active color
-        // },
       }}
     >
       <Box sx={{pl: 3}}>

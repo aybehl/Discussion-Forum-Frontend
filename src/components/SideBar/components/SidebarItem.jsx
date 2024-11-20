@@ -7,7 +7,7 @@ const SidebarItem = ({ label, to}) => {
   const theme = useTheme();
 
   return (
-    <NavLink to={to} style={{ textDecoration: "none" }}>
+    <NavLink to={to} style={{ textDecoration: "none"}}>
       {({ isActive }) => (
         <ListItemButton
           sx={{

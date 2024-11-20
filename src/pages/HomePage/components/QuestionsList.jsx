@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, CircularProgress, Button } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import FiltersAndActions from "./FiltersAndActions";
 import QuestionItem from "./QuestionItem";
 import { getAllQuestions, getQuestionsByTags } from "../../../api/questions";
 import CustomButton from "../../../components/CustomButton";
+import AskQuestionModal from "./AskQuestionModal";
 
 const QuestionsList = () => {
   const pageSize = 6;
+  // State for questions and filtering
   const [questions, setQuestions] = useState([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+
+   // State for pagination and modal
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -57,6 +62,7 @@ const QuestionsList = () => {
       <FiltersAndActions
         onFilterChange={handleFilterChange}
         selectedTag={selectedTag}
+        onAskQuestion={() => setIsModalOpen(true)}
       />
       <Box
         sx={{
@@ -90,9 +96,6 @@ const QuestionsList = () => {
           <CircularProgress />
         ) : (
           !isLastPage && (
-            // <Button variant="outlined" onClick={handleLoadMore}>
-            //   Load More
-            // </Button>
             <CustomButton
               variant="contained"
               bgColor="primary"
@@ -107,6 +110,13 @@ const QuestionsList = () => {
           )
         )}
       </Box>
+      <AskQuestionModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onQuestionPosted={() => {
+          setCurrentPage(0);
+        }}
+      />
     </Box>
   );
 };

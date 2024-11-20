@@ -3,7 +3,7 @@ import { Box, Button, MenuItem, Select } from "@mui/material";
 import { TagsContext } from "../../../contexts/TagsProvider";
 import FilterListIcon from '@mui/icons-material/FilterList';
 
-const FiltersAndActions = ({ onFilterChange, selectedTag }) => {
+const FiltersAndActions = ({ onFilterChange, selectedTag, onAskQuestion }) => {
   const {tags} = useContext(TagsContext);
   
   const handleChange = (event) => {
@@ -81,9 +81,10 @@ const FiltersAndActions = ({ onFilterChange, selectedTag }) => {
           textTransform: "none",
           py: "0.5rem",
           px: "1.5rem",
-          color: "common.white"
+          color: "common.white",
+          fontWeight: "bold"
         }}
-        onClick={() => console.log("Navigate to Ask Question")}
+        onClick={onAskQuestion}
       >
         Ask a Question
       </Button>
