@@ -1,5 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
+const apiUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
+
 export const getAllQuestions = async (page = 0, size = 10) => {
   try {
     const response = await axiosInstance.get('/api/questions', {

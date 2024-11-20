@@ -113,8 +113,9 @@ const QuestionsList = () => {
       <AskQuestionModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onQuestionPosted={() => {
-          setCurrentPage(0);
+        onQuestionPosted={(newQuestion) => {
+          setQuestions((prevQuestions) => [newQuestion, ...prevQuestions]); // Prepend the new question
+          setIsLastPage(false); // Reset pagination flag if needed
         }}
       />
     </Box>

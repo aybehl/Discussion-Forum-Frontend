@@ -82,7 +82,8 @@ const FiltersAndActions = ({ onFilterChange, selectedTag, onAskQuestion }) => {
           py: "0.5rem",
           px: "1.5rem",
           color: "common.white",
-          fontWeight: "bold"
+          fontWeight: "bold",
+          borderRadius: "0.5rem"
         }}
         onClick={onAskQuestion}
       >

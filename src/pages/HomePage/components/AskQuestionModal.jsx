@@ -9,6 +9,7 @@ import {
   Button,
   Avatar,
   Autocomplete,
+  Chip
 } from "@mui/material";
 import TextInput from "./TextInput";
 import { useUser } from "../../../contexts/UserProvider";
@@ -25,7 +26,13 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
     title: "",
     body: "",
     tags: [],
-    mediaFiles: null,
+    mediaFiles: [],
+  });
+
+  const [errors, setErrors] = useState({
+    title: false,
+    body: false,
+    tags: false
   });
 
   const handleInputChange = (field, value) => {
@@ -36,10 +43,36 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
   };
 
   const handleMediaUpload = (e) => {
-    handleInputChange("mediaFiles", e.target.files[0]);
+    const files = Array.from(e.target.files);
+    handleInputChange("mediaFiles", [
+      ...(questionData.mediaFiles || []),
+      ...files,
+    ]);
+  };
+
+  const handleRemoveFile = (fileToRemove) => {
+    handleInputChange(
+      "mediaFiles",
+      questionData.mediaFiles.filter((file) => file.name != fileToRemove.name)
+    );
+  };
+
+  const validateInputs = () => {
+    const newErrors = {
+      title: questionData.title.trim() === "",
+      body: questionData.body.trim() === "",
+      tags: questionData.tags.length === 0,
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).includes(true); // Return true if no errors
   };
 
   const handleSubmit = async () => {
+    if (!validateInputs()) {
+      return; // Exit if validation fails
+    }
+
     try {
       // Prepare data for API call
       const payload = {
@@ -49,8 +82,11 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
         mediaFiles: questionData.mediaFiles,
       };
 
-      await createQuestion(payload); // API call to create question
-      onQuestionPosted(); // Refresh questions list
+      const response = await createQuestion(payload); // API call to create question
+      const newQuestion = response.data;
+      newQuestion.noOfReplies = 0;
+      newQuestion.upvotes = 0;
+      onQuestionPosted(response.data); // Refresh questions list
       onClose(); // Close modal
     } catch (error) {
       console.error("Error creating question:", error);
@@ -90,27 +126,31 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
       <DialogContent sx={{ padding: 0, mx: 2, my: 2 }}>
         <Box display="flex" flexDirection="column" gap="1rem">
           <TextInput
-            label="Question Title"
+            label="Title*"
             placeholder="Give a short and descriptive title for your question"
             value={questionData.title}
             onChange={(value) => handleInputChange("title", value)}
+            required={true}
+            error={errors.title}
+            helperText={errors.title ? "Question title is required" : ""}
           />
           <TextInput
-            label="Question"
+            label="Body*"
             placeholder="Ask a question and let our community help you..."
             value={questionData.body}
             onChange={(value) => handleInputChange("body", value)}
             multiline
             rows={4}
+            required={true}
+            error={errors.body}
+            helperText={errors.body ? "Question body is required" : ""}
           />
           <Autocomplete
             multiple
             options={tags}
             getOptionLabel={(tag) => tag.tagName}
             value={questionData.tags}
-            onChange={(event, newValue) =>
-              handleInputChange("tagIds", newValue)
-            }
+            onChange={(event, newValue) => handleInputChange("tags", newValue)}
             isOptionEqualToValue={(option, value) =>
               option.tagId === value.tagId
             }
@@ -119,6 +159,8 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
                 {...params}
                 label="Tags"
                 placeholder="Select tags for your question"
+                error={errors.tags}
+                helperText={errors.tags ? "At least one tag is required" : ""}
               />
             )}
             sx={{
@@ -132,12 +174,26 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
           />
           <Button variant="outlined" component="label">
             Upload Media
-            <input type="file" hidden onChange={handleMediaUpload} />
+            <input type="file" hidden multiple onChange={handleMediaUpload} />
           </Button>
-          {questionData.mediaFiles && (
-            <Typography variant="caption">
-              {questionData.mediaFiles.name}
-            </Typography>
+          {questionData.mediaFiles && questionData.mediaFiles.length > 0 && (
+            <Box sx={{ mt: 0 }}>
+              {questionData.mediaFiles.map((file, index) => (
+                <Chip
+                  key={index}
+                  label={file.name}
+                  onDelete={() => handleRemoveFile(file)} // Add a delete icon to remove the file
+                  sx={{
+                    margin: "0.25rem 0.25rem 0 0",
+                    backgroundColor: "gray.light",
+                    color: "gray.dark",
+                    "& .MuiChip-deleteIcon": {
+                      color: "primary.main",
+                    },
+                  }}
+                />
+              ))}
+            </Box>
           )}
         </Box>
       </DialogContent>
