@@ -93,7 +93,7 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
     }
   };
 
-  const avatarContent = user.profilePic
+  const avatarContent = user == null ? { children: "G" } : user.profilePic
     ? { src: user.profilePic }
     : { children: user.userName?.charAt(0).toUpperCase() };
 
@@ -107,7 +107,7 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
             sx={{
               width: 50,
               height: 50,
-              backgroundColor: !user.profilePic
+              backgroundColor: !user?.profilePic
                 ? "primary.main"
                 : "transparent",
             }}
@@ -119,7 +119,7 @@ const AskQuestionModal = ({ open, onClose, onQuestionPosted }) => {
               textDecoration: "none",
             }}
           >
-            {`@${user.userName}`}
+            {`@${user?.userName}`}
           </Typography>
         </Box>
       </DialogTitle>

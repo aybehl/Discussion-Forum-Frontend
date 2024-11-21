@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import ProfileSetupPage from "./pages/ProfileSetupPage/ProfileSetupPage";
 import { UserProvider } from "./contexts/UserProvider";
 import { TagsProvider } from "./contexts/TagsProvider";
+import QuestionDetailsPage from "./pages/QuestionDetailsPage/QuestionDetailsPage";
 
 function App() {
   return (
@@ -20,6 +21,11 @@ function App() {
             <Route
               path="/signup/profile-setup"
               element={<ProfileSetupPage />}
+            />
+
+            <Route
+              path="/questions/:questionId"
+              element={<QuestionDetailsPage />}
             />
 
             {/* <Route path="/posts" element={<PostsPage />} />

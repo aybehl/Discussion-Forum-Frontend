@@ -23,10 +23,10 @@ const Sidebar = () => {
   }, []);
 
   const sidebarItems = [
-    { label: "All Questions", to: "/questions" },
-    { label: "My Posts", to: "/posts" },
-    { label: "My Bookmarks", to: "/bookmarks" },
-    { label: "Mentions", to: "/mentions" },
+    { label: "All Questions", to: "/questions", exact: true },
+    { label: "My Posts", to: "/posts", exact: true },
+    { label: "My Bookmarks", to: "/bookmarks", exact: true },
+    { label: "Mentions", to: "/mentions", exact: true },
   ];
 
   const handleToggleTags = () => {
@@ -45,7 +45,7 @@ const Sidebar = () => {
     >
       <List sx={{ padding: "0" }}>
         {sidebarItems.map((item) => (
-          <SidebarItem key={item.to} label={item.label} to={item.to} />
+          <SidebarItem key={item.to} label={item.label} to={item.to} exact={item.exact}/>
         ))}
       </List>
 

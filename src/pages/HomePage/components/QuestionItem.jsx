@@ -3,6 +3,7 @@ import { Box, Typography, Chip } from "@mui/material";
 import { formatISODate } from "../../../utils/dateUtils";
 import { Link } from "react-router-dom";
 import { useTheme } from "@emotion/react";
+import TagChips from "../../../components/TagChips";
 
 const QuestionItem = ({ question }) => {
   const { title, tags, upvotes, noOfReplies, createdAt } = question;
@@ -29,24 +30,16 @@ const QuestionItem = ({ question }) => {
         },
       }}
     >
-      <Box sx={{pl: 3}}>
+      <Box sx={{
+        pl: 3,
+        display: 'flex', 
+        flexDirection: 'column',
+        gap: "0.5rem",
+        }}>
         <Typography variant="subtitle2" sx={{fontWeight: 300}} >
           {title}
         </Typography>
-        <Box sx={{ display: "flex", gap: "0.5rem", mt: 1 }}>
-          {tags.map((tag) => (
-            <Chip
-              key={tag.tagId}
-              label={`#${tag.tagName}`}
-              size="small"
-              sx={{
-                backgroundColor: "primary.main",
-                fontSize: "0.75rem",
-                color: "common.white"
-              }}
-            />
-          ))}
-        </Box>
+        <TagChips tags={tags}/>
       </Box>
       <Typography variant="subtitle2" textAlign="center" sx={{fontWeight: 300}}>
         {upvotes}

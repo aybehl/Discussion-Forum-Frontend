@@ -13,7 +13,7 @@ const QuestionsList = () => {
   const [selectedTag, setSelectedTag] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
 
-   // State for pagination and modal
+  // State for pagination and modal
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,8 +57,15 @@ const QuestionsList = () => {
   };
 
   return (
-    <Box sx={{ pl: 4, mr: 8, width: "100%", borderLeft: "1px solid",
-      borderColor: "gray.darker", }}>
+    <Box
+      sx={{
+        pl: 4,
+        mr: 8,
+        width: "100%",
+        borderLeft: "1px solid",
+        borderColor: "gray.darker",
+      }}
+    >
       <FiltersAndActions
         onFilterChange={handleFilterChange}
         selectedTag={selectedTag}
@@ -75,7 +82,7 @@ const QuestionsList = () => {
           borderColor: "gray.darker",
         }}
       >
-        <Typography variant="body2" fontWeight="bold" sx={{pl: 3}}>
+        <Typography variant="body2" fontWeight="bold" sx={{ pl: 3 }}>
           Question
         </Typography>
         <Typography variant="body2" fontWeight="bold" textAlign="center">

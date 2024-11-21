@@ -61,3 +61,17 @@ export const createQuestion = async (questionData) => {
 
   return await response.json(); // Return API response
 };
+
+export const getQuestionDetails = async (questionId, userId) => {
+  try {
+    const response = await axiosInstance.get(`/api/questions/${questionId}`, {
+      headers: {
+        userId: userId || null,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching question details:", error);
+    throw error;
+  }
+};
