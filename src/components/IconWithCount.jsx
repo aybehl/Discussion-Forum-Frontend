@@ -1,8 +1,13 @@
-
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
-const IconWithCount = ({ icon: Icon, hoverIcon: HoverIcon, count, onClick, label }) => {
+const IconWithCount = ({
+  icon: Icon,
+  hoverIcon: HoverIcon,
+  count,
+  onClick,
+  label,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -21,13 +26,16 @@ const IconWithCount = ({ icon: Icon, hoverIcon: HoverIcon, count, onClick, label
         },
       }}
     >
-      {isHovered && HoverIcon ? (
-        <HoverIcon sx={{ fontSize: "1.25rem" }} />
-      ) : (
+      {!isHovered ? (
         <Icon sx={{ fontSize: "1.25rem" }} />
+      ) : HoverIcon ? (
+        <HoverIcon sx={{ fontSize: "1.5rem" }} />
+      ) : (
+        <Icon sx={{ fontSize: "1.5rem" }} />
       )}
+
       <Typography
-        variant="body1"
+        variant="subtitle2"
         sx={{
           fontWeight: "normal",
         }}

@@ -229,10 +229,10 @@ const QuestionDetailsSection = () => {
         >
           <Box display="flex" alignItems="center" gap="0.5rem" mb={1}>
             <Avatar
-              {...(answer.author.profilePic
-                ? { src: answer.author.profilePic }
+              {...(answer.author?.profilePic?.mediaUrl
+                ? { src: answer.author?.profilePic?.mediaUrl }
                 : {
-                    children: answer.author.username?.charAt(0).toUpperCase(),
+                    children: answer.author?.username?.charAt(0).toUpperCase(),
                   })}
               sx={{
                 width: 40,
