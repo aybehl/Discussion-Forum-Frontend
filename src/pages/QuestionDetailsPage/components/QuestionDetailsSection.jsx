@@ -20,6 +20,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import IconWithCount from "../../../components/IconWithCount";
+import QuestionMenu from "./QuestionMenu";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -174,6 +175,20 @@ const QuestionDetailsSection = () => {
 
       {/* Tags */}
       <TagChips tags={question.tags} />
+
+      <Box sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+      }}>
+          <QuestionMenu
+            authorId={question.author.userId} // Pass the author's ID
+            onEdit={() => console.log("Edit Post Clicked")}
+            onDelete={() => console.log("Delete Post Clicked")}
+            onBookmark={() => console.log("Bookmark Post Clicked")}
+            onReport={() => console.log("Report Post Clicked")}
+          />
+      </Box>
 
       {/* Votes */}
       <Box
