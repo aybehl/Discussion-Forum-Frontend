@@ -75,3 +75,42 @@ export const getQuestionDetails = async (questionId, userId) => {
     throw error;
   }
 };
+
+export const updateQuestion = async (questionId, updatedData) => {
+  const formData = new FormData();
+
+  // Append JSON data for the question
+  formData.append(
+    "data",
+    JSON.stringify({
+      title: updatedData.title,
+      body: updatedData.body,
+      tagIds: updatedData.tagIds, // Array of tag IDs
+      mediaToDelete: updatedData.mediaToDelete, // Array of media IDs to delete
+    })
+  );
+
+  // Append new media files, if any
+  if (updatedData.newMediaFiles && updatedData.newMediaFiles.length > 0) {
+    updatedData.newMediaFiles.forEach((file) => {
+      formData.append("newMediaFiles", file);
+    });
+  }
+
+  const response = await fetch(`${apiUrl}/api/questions/${questionId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("jwtToken")}`,
+    },
+    body: formData,
+  });
+
+  // Handle errors
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to update question");
+  }
+
+  return await response.json(); // Return API response
+};
+

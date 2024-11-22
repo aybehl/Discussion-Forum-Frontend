@@ -21,6 +21,7 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import IconWithCount from "../../../components/IconWithCount";
 import QuestionMenu from "./QuestionMenu";
+import EditQuestionModal from "./EditQuestionModal";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -28,6 +29,7 @@ const QuestionDetailsSection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [newAnswer, setNewAnswer] = useState(""); // Input for new answer
   const { user } = useUser();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchQuestionDetails = async () => {
@@ -44,6 +46,19 @@ const QuestionDetailsSection = () => {
 
     if (questionId) fetchQuestionDetails();
   }, [questionId]);
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false); // Close the modal
+  };
+
+  const handleQuestionUpdated = () => {
+    // Logic to refresh the question details after the question is updated
+    console.log("Question updated successfully!");
+  };
 
   const handlePostAnswer = async () => {
     console.log("Posting answer:", newAnswer);
@@ -181,7 +196,7 @@ const QuestionDetailsSection = () => {
           // justifyContent: "center",
         }}
       >
-         {/* Tags */}
+        {/* Tags */}
         <TagChips tags={question.tags} />
         <Box
           sx={{
@@ -191,15 +206,21 @@ const QuestionDetailsSection = () => {
           }}
         >
           <QuestionMenu
-            authorId={question.author.userId} // Pass the author's ID
-            onEdit={() => console.log("Edit Post Clicked")}
+            authorId={question.author.userId}
+            onEdit={handleEditClick}
             onDelete={() => console.log("Delete Post Clicked")}
             onBookmark={() => console.log("Bookmark Post Clicked")}
             onReport={() => console.log("Report Post Clicked")}
           />
         </Box>
+        <EditQuestionModal
+          open={isEditModalOpen} // Modal open state
+          onClose={handleEditModalClose} // Close modal handler
+          questionId={questionId}
+          question={question} // Pass the question ID
+          onQuestionUpdated={handleQuestionUpdated} // Callback after update
+        />
       </Box>
-     
 
       {/* Votes */}
       <Box
