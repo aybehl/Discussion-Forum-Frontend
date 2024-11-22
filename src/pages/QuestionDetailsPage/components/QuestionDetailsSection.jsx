@@ -23,6 +23,7 @@ import IconWithCount from "../../../components/IconWithCount";
 import QuestionMenu from "./QuestionMenu";
 import EditQuestionModal from "./EditQuestionModal";
 import MediaCarousel from "../../../components/MediaCarousel";
+import DeleteQuestionModal from "../../HomePage/components/DeleteQuestionModal";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -31,7 +32,9 @@ const QuestionDetailsSection = () => {
   const [newAnswer, setNewAnswer] = useState(""); // Input for new answer
   const { user } = useUser();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
 
   useEffect(() => {
     const fetchQuestionDetails = async () => {
@@ -51,10 +54,19 @@ const QuestionDetailsSection = () => {
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
+    handleDeleteModalClose();
   };
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false); // Close the modal
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const handleQuestionUpdated = () => {
@@ -121,6 +133,7 @@ const QuestionDetailsSection = () => {
         display: "flex",
         flexDirection: "column",
         gap: "0.5rem",
+        width: "100%"
       }}
     >
       <Box
@@ -148,6 +161,7 @@ const QuestionDetailsSection = () => {
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
+          flex: 1
           // alignItems: "flex-start",
          }}>
           {/* Question Header */}
@@ -232,7 +246,7 @@ const QuestionDetailsSection = () => {
               <QuestionMenu
                 authorId={question.author.userId}
                 onEdit={handleEditClick}
-                onDelete={() => console.log("Delete Post Clicked")}
+                onDelete={handleDeleteClick}
                 onBookmark={() => console.log("Bookmark Post Clicked")}
                 onReport={() => console.log("Report Post Clicked")}
               />
@@ -243,6 +257,13 @@ const QuestionDetailsSection = () => {
               questionId={questionId}
               question={question} // Pass the question ID
               onQuestionUpdated={handleQuestionUpdated} // Callback after update
+            />
+            <DeleteQuestionModal
+              open={isDeleteModalOpen}
+              onClose={handleDeleteModalClose}
+              onEdit={handleEditClick}
+              questionId={questionId}
+              //onQuestionDelete={handleQuestionDeleted}
             />
           </Box>
 

@@ -115,3 +115,12 @@ export const updateQuestion = async (questionId, updatedData) => {
   return await response.json(); // Return API response
 };
 
+export const deleteQuestion = async (questionId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/questions/${questionId}`);
+    return response;
+  } catch (error) {
+    console.error("Error deleting question details:", error);
+    throw error;
+  }
+};
