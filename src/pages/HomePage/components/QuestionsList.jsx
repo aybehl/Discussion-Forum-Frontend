@@ -106,7 +106,7 @@ const QuestionsList = () => {
             <CustomButton
               variant="outlined"
               bgColor="primary"
-              textColor="common.white"
+              textColor="gray.lighter"
               size="small"
               padding={"0.5rem 1rem"}
               borderRadius={"0.5rem"}

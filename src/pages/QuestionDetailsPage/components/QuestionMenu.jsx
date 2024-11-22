@@ -10,14 +10,14 @@ import GuestPromptModal from "../../../components/GuestPromptModal";
 
 const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
   const { user } = useUser();
+  const userId = sessionStorage.getItem("userId");
   const [anchorEl, setAnchorEl] = useState(null);
   const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
 
   const handleMenuOpen = (event) => {
-    console.log('event - ', event);
-    if(!user){
+    if (!user) {
       setIsGuestModalOpen(true);
       return;
     }
@@ -27,18 +27,22 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleGuestModalClose = () => {
     setIsGuestModalOpen(false);
   };
 
   // Determine menu options based on the user's context
   const renderMenuOptions = () => {
-    if (user && user.userId === authorId) {
+    if (user && userId == authorId) {
       // Author's menu
       return [
         <MenuItem key="edit-post" onClick={onEdit}>
-          <EditIcon sx={{ marginRight: "0.5rem" }} />
+          <EditIcon
+            sx={{
+              marginRight: "0.5rem",
+            }}
+          />
           Edit Post
         </MenuItem>,
         <MenuItem key="delete-post" onClick={onDelete}>
@@ -46,7 +50,7 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
           Delete Post
         </MenuItem>,
       ];
-    } else if(user) {
+    } else if (user) {
       // Logged-in user menu
       return [
         <MenuItem key="bookmark" onClick={onBookmark}>
@@ -74,10 +78,9 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
           "&:hover": {
             color: "primary.main",
           },
-
         }}
       >
-        <MoreVertIcon sx={{ fontSize: "1.25rem" }}/>
+        <MoreVertIcon sx={{ fontSize: "1.25rem" }} />
       </IconButton>
       {/* Menu */}
       <Menu
@@ -102,7 +105,7 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
               fontSize: "0.875rem",
               padding: "0.75rem 1rem",
               "&:hover": {
-                backgroundColor: "primary.light",
+                color: "primary.main",
               },
             },
           },
