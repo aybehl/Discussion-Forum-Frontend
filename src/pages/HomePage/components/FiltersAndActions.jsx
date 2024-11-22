@@ -2,13 +2,31 @@ import React, { useContext } from "react";
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { TagsContext } from "../../../contexts/TagsProvider";
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useUser } from "../../../contexts/UserProvider";
+import GuestPromptModal from "../../../components/GuestPromptModal";
+import { useState } from "react";
 
 const FiltersAndActions = ({ onFilterChange, selectedTag, onAskQuestion }) => {
   const {tags} = useContext(TagsContext);
+  const { user } = useUser();
+  const isGuest = !user || !user.userName;
+  const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
   
+  const handleGuestModalClose = () => {
+    setIsGuestModalOpen(false);
+  };
+
   const handleChange = (event) => {
     onFilterChange(event);
   };
+
+  const handleClick = () => {
+    if(isGuest){
+      setIsGuestModalOpen(true);
+    } else {
+      onAskQuestion();
+    }
+  }
 
   return (
     <Box
@@ -85,10 +103,16 @@ const FiltersAndActions = ({ onFilterChange, selectedTag, onAskQuestion }) => {
           fontWeight: "bold",
           borderRadius: "0.5rem"
         }}
-        onClick={onAskQuestion}
+        onClick={handleClick}
       >
         Ask a Question
       </Button>
+      <GuestPromptModal
+        open={isGuestModalOpen}
+        onClose={handleGuestModalClose}
+        headingText="Oops! You Need an Account to Ask a Question!"
+        subheadingText="Sign up or log in to start a conversation and get answers from the community."
+      />
     </Box>
   );
 };

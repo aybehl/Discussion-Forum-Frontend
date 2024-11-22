@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Box, Menu, MenuItem, IconButton, Typography } from "@mui/material";
+import { Box, Menu, MenuItem, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ReportIcon from "@mui/icons-material/Report";
-import LoginIcon from "@mui/icons-material/Login";
 import { useUser } from "../../../contexts/UserProvider";
 import GuestPromptModal from "../../../components/GuestPromptModal";
 

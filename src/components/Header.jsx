@@ -1,10 +1,24 @@
 import { Box, Typography, Avatar, CircularProgress } from "@mui/material";
 import { useUser } from "../contexts/UserProvider";
 import { Link } from "react-router-dom";
+import GuestPromptModal from "./GuestPromptModal";
+import { useState } from "react";
 
 const Header = ({ variant = "default" }) => {
   const { user, loading } = useUser();
   const isGuest = !user || !user.userName;
+  const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
+
+  const handleGuestModalClose = () => {
+    setIsGuestModalOpen(false);
+  };
+
+  const handleAvatarClick = (event) => {
+    if (isGuest) {
+      event.preventDefault(); // Prevent navigation
+      setIsGuestModalOpen(true); // Open the modal
+    }
+  };
 
   if (loading) {
     // Show a loader while fetching user profile
@@ -66,6 +80,7 @@ const Header = ({ variant = "default" }) => {
         >
           <Link
             to={isGuest ? "#" : "/profile"}
+            onClick={handleAvatarClick}
             style={{ textDecoration: "none" }}
           >
             <Box
@@ -102,6 +117,13 @@ const Header = ({ variant = "default" }) => {
           </Link>
         </Box>
       )}
+      {/* Modal for Guest Users */}
+      <GuestPromptModal
+        open={isGuestModalOpen}
+        onClose={handleGuestModalClose}
+        headingText="Oops! You Need an Account to View Your Profile!"
+        subheadingText="Sign up or log in to start a conversation and get answers from the community."
+      />
     </Box>
   );
 };

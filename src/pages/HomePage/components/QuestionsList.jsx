@@ -104,7 +104,7 @@ const QuestionsList = () => {
         ) : (
           !isLastPage && (
             <CustomButton
-              variant="contained"
+              variant="outlined"
               bgColor="primary"
               textColor="common.white"
               size="small"

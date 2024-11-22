@@ -173,14 +173,23 @@ const QuestionDetailsSection = () => {
         </Typography>
       </Box>
 
-      {/* Tags */}
-      <TagChips tags={question.tags} />
-
-      <Box sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          // alignItems: "center",
+          // justifyContent: "center",
+        }}
+      >
+         {/* Tags */}
+        <TagChips tags={question.tags} />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
           <QuestionMenu
             authorId={question.author.userId} // Pass the author's ID
             onEdit={() => console.log("Edit Post Clicked")}
@@ -188,7 +197,9 @@ const QuestionDetailsSection = () => {
             onBookmark={() => console.log("Bookmark Post Clicked")}
             onReport={() => console.log("Report Post Clicked")}
           />
+        </Box>
       </Box>
+     
 
       {/* Votes */}
       <Box

@@ -51,11 +51,8 @@ const GuestPromptModal = ({ open, onClose, headingText, subheadingText }) => {
           <Typography variant="h5">{headingText}</Typography>
         </Box>
 
-        {/* <Typography variant="h5" align="center">
-          {headingText}
-        </Typography> */}
       </DialogTitle>
-      <DialogContent sx={{ padding: 0, mx: 2, my: 2 }}>
+      <DialogContent sx={{ padding: 0, mx: 2, my: 1 }}>
       <Box sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -79,6 +76,7 @@ const GuestPromptModal = ({ open, onClose, headingText, subheadingText }) => {
           gap="1.5rem"
           width="100%"
           marginBottom={"2rem"}
+          marginTop={"2rem"}
         >
           <CustomButton
             variant="contained"
