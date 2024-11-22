@@ -17,15 +17,28 @@ import { TagsContext } from "../../../contexts/TagsProvider";
 import { updateQuestion } from "../../../api/questions";
 import CustomButton from "../../../components/CustomButton";
 
-const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpdated }) => {
+const EditQuestionModal = ({
+  open,
+  onClose,
+  questionId,
+  question,
+  onQuestionUpdated,
+}) => {
   const { user } = useUser();
   const { tags } = useContext(TagsContext);
+  const originalTags = question.tags;
+
+  // Media variables
+  const [media, setMedia] = useState(question.media || []); // Existing media files
+  const [newMediaFiles, setNewMediaFiles] = useState([]); // New uploads
+  const [mediaToDelete, setMediaToDelete] = useState([]); // Deleted media IDs
 
   const [questionData, setQuestionData] = useState({
     title: question.title,
     body: question.body,
     tags: question.tags,
     mediaFiles: question.media || [],
+    mediaToDelete: [],
   });
 
   const [errors, setErrors] = useState({
@@ -43,23 +56,22 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
 
   const handleMediaUpload = (e) => {
     const files = Array.from(e.target.files);
-    handleInputChange("mediaFiles", [
-      ...(questionData.mediaFiles || []),
-      ...files,
-    ]);
+
+    setNewMediaFiles((prevFiles) => [...prevFiles, ...files]);
   };
 
-  const handleRemoveFile = (fileToRemove) => {
-    const updatedMediaFiles = questionData.mediaFiles.filter(
-      (file) => file.mediaId !== fileToRemove.mediaId
-    );
-    handleInputChange("mediaFiles", updatedMediaFiles);
-
-    if (fileToRemove.mediaId) {
-      handleInputChange("mediaToDelete", [
-        ...(questionData.mediaToDelete || []),
-        fileToRemove.mediaId,
-      ]);
+  const handleRemoveMedia = (fileOrMedia) => {
+    if (fileOrMedia.mediaId) {
+      // Existing media file (has mediaId)
+      setMediaToDelete((prev) => [...prev, fileOrMedia.mediaId]); // Add to mediaToDelete
+      setMedia((prevMedia) =>
+        prevMedia.filter((media) => media.mediaId !== fileOrMedia.mediaId)
+      ); // Remove from media array
+    } else {
+      // Newly uploaded file (doesn't have mediaId)
+      setNewMediaFiles((prevFiles) =>
+        prevFiles.filter((file) => file !== fileOrMedia)
+      ); // Remove from newMediaFiles
     }
   };
 
@@ -80,25 +92,31 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
     }
 
     try {
-      const formData = new FormData();
-      formData.append(
-        "data",
-        JSON.stringify({
-          title: questionData.title,
-          body: questionData.body,
-          tagIds: questionData.tags.map((tag) => tag.tagId),
-          mediaToDelete: questionData.mediaToDelete,
-        })
-      );
+      const finalTags = questionData.tags;
+      const tagsToDelete = originalTags
+        .filter(
+          (originalTag) =>
+            !finalTags.some((tag) => tag.tagId == originalTag.tagId)
+        )
+        .map((tag) => tag.tagId);
 
-      // Add new media files to the form data
-      questionData.mediaFiles.forEach((file) => {
-        if (!file.mediaId) {
-          formData.append("newMediaFiles", file);
-        }
-      });
+      const newTagIds = finalTags
+        .filter(
+          (finalTag) => !originalTags.some((tag) => tag.tagId == finalTag.tagId)
+        )
+        .map((tag) => tag.tagId);
 
-      await updateQuestion(questionId, formData); // API call to update question
+      // Prepare data for API call
+      const payload = {
+        title: questionData.title,
+        body: questionData.body,
+        tagsToDelete,
+        newTagIds,
+        mediaToDelete, // Track deleted media IDs
+        newMediaFiles, // Track new uploads
+      };
+
+      await updateQuestion(questionId, payload); // API call to update question
       onQuestionUpdated(); // Callback to refresh the question
       onClose(); // Close the modal
     } catch (error) {
@@ -106,9 +124,12 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
     }
   };
 
-  const avatarContent = user == null ? { children: "G" } : user.profilePic
-    ? { src: user.profilePic }
-    : { children: user.userName?.charAt(0).toUpperCase() };
+  const avatarContent =
+    user == null
+      ? { children: "G" }
+      : user.profilePic
+      ? { src: user.profilePic }
+      : { children: user.userName?.charAt(0).toUpperCase() };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -163,9 +184,7 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
             options={tags}
             getOptionLabel={(tag) => tag.tagName}
             value={questionData.tags}
-            onChange={(event, newValue) =>
-              handleInputChange("tags", newValue)
-            }
+            onChange={(event, newValue) => handleInputChange("tags", newValue)}
             isOptionEqualToValue={(option, value) =>
               option.tagId === value.tagId
             }
@@ -183,25 +202,35 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
             Upload Media
             <input type="file" hidden multiple onChange={handleMediaUpload} />
           </Button>
-          {questionData.mediaFiles && questionData.mediaFiles.length > 0 && (
-            <Box sx={{ mt: 0 }}>
-              {questionData.mediaFiles.map((file, index) => (
-                <Chip
-                  key={index}
-                  label={file.name || file.mediaUrl}
-                  onDelete={() => handleRemoveFile(file)}
-                  sx={{
-                    margin: "0.25rem 0.25rem 0 0",
-                    backgroundColor: "gray.light",
-                    color: "gray.dark",
-                    "& .MuiChip-deleteIcon": {
-                      color: "primary.main",
-                    },
-                  }}
-                />
-              ))}
-            </Box>
-          )}
+          <Box>
+            {media.map((mediaItem) => (
+              <Chip
+                key={mediaItem.mediaId}
+                label={mediaItem.mediaUrl.split("/").pop()} // Display file name
+                onDelete={() => handleRemoveMedia(mediaItem)} // Handle delete
+                sx={{
+                  margin: "0.25rem",
+                  backgroundColor: "gray.light",
+                  color: "gray.dark",
+                  "& .MuiChip-deleteIcon": { color: "primary.main" },
+                }}
+              />
+            ))}
+
+            {newMediaFiles.map((file, index) => (
+              <Chip
+                key={index}
+                label={file.name} // Display new file name
+                onDelete={() => handleRemoveMedia(file)} // Handle delete
+                sx={{
+                  margin: "0.25rem",
+                  backgroundColor: "gray.light",
+                  color: "gray.dark",
+                  "& .MuiChip-deleteIcon": { color: "primary.main" },
+                }}
+              />
+            ))}
+          </Box>
         </Box>
       </DialogContent>
       <DialogActions sx={{ padding: 0, mx: 2, my: 2 }}>
@@ -223,7 +252,7 @@ const EditQuestionModal = ({ open, onClose, questionId, question, onQuestionUpda
           size="small"
           padding={"0.5rem 1rem"}
           borderRadius={"0.5rem"}
-          content={"Update"}
+          content={"Edit Post"}
           onClick={handleUpdate}
           textVariant="outlined"
         />

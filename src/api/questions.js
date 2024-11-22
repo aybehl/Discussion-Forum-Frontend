@@ -85,7 +85,8 @@ export const updateQuestion = async (questionId, updatedData) => {
     JSON.stringify({
       title: updatedData.title,
       body: updatedData.body,
-      tagIds: updatedData.tagIds, // Array of tag IDs
+      tagsToDelete: updatedData.tagsToDelete,
+      newTagIds: updatedData.newTagIds,
       mediaToDelete: updatedData.mediaToDelete, // Array of media IDs to delete
     })
   );

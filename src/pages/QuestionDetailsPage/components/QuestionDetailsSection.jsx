@@ -22,6 +22,7 @@ import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import IconWithCount from "../../../components/IconWithCount";
 import QuestionMenu from "./QuestionMenu";
 import EditQuestionModal from "./EditQuestionModal";
+import MediaCarousel from "../../../components/MediaCarousel";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -30,6 +31,7 @@ const QuestionDetailsSection = () => {
   const [newAnswer, setNewAnswer] = useState(""); // Input for new answer
   const { user } = useUser();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchQuestionDetails = async () => {
@@ -45,7 +47,7 @@ const QuestionDetailsSection = () => {
     };
 
     if (questionId) fetchQuestionDetails();
-  }, [questionId]);
+  }, [questionId, refreshKey]);
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
@@ -57,7 +59,7 @@ const QuestionDetailsSection = () => {
 
   const handleQuestionUpdated = () => {
     // Logic to refresh the question details after the question is updated
-    console.log("Question updated successfully!");
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   const handlePostAnswer = async () => {
@@ -110,7 +112,7 @@ const QuestionDetailsSection = () => {
   return (
     <Box
       sx={{
-        pt: 1,
+        pt: 4,
         pl: 4,
         mr: 8,
         width: "100%",
@@ -118,210 +120,234 @@ const QuestionDetailsSection = () => {
         borderColor: "gray.darker",
         display: "flex",
         flexDirection: "column",
-        gap: "1rem",
+        gap: "0.5rem",
       }}
     >
-      {/* Question Header */}
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          gap: "1rem",
+          alignItems: "flex-start",
         }}
       >
-        <Box display="flex" alignItems="center" gap="0.25rem">
-          <Avatar
-            {...(question.author?.profilePic?.mediaUrl
-              ? { src: question.author?.profilePic?.mediaUrl }
-              : {
-                  children: question.author?.username?.charAt(0).toUpperCase(),
-                })}
+        <Avatar
+          {...(question.author?.profilePic?.mediaUrl
+            ? { src: question.author?.profilePic?.mediaUrl }
+            : {
+                children: question.author?.username?.charAt(0).toUpperCase(),
+              })}
+          sx={{
+            width: 50,
+            height: 50,
+            backgroundColor: !question.author.profilePic
+              ? "primary.main"
+              : "transparent",
+          }}
+        />
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          // alignItems: "flex-start",
+         }}>
+          {/* Question Header */}
+          <Box
             sx={{
-              width: 50,
-              height: 50,
-              backgroundColor: !question.author.profilePic
-                ? "primary.main"
-                : "transparent",
+              pt: 1
             }}
-          />
-          <Typography
-            variant="subtitle2"
-            sx={{ fontWeight: "normal", color: "common.white" }}
           >
-            {`@${question.author.username}`}
-          </Typography>
-        </Box>
-        <Typography
-          variant="body2"
-          sx={{
-            color: "gray.light",
-          }}
-        >
-          {formatISODate(question.createdAt)}
-        </Typography>
-      </Box>
-
-      {/* Question Title and Body */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.25rem",
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: "bold",
-            color: "common.white",
-          }}
-        >
-          {question.title}
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: "gray.light",
-          }}
-        >
-          {question.body}
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          // alignItems: "center",
-          // justifyContent: "center",
-        }}
-      >
-        {/* Tags */}
-        <TagChips tags={question.tags} />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <QuestionMenu
-            authorId={question.author.userId}
-            onEdit={handleEditClick}
-            onDelete={() => console.log("Delete Post Clicked")}
-            onBookmark={() => console.log("Bookmark Post Clicked")}
-            onReport={() => console.log("Report Post Clicked")}
-          />
-        </Box>
-        <EditQuestionModal
-          open={isEditModalOpen} // Modal open state
-          onClose={handleEditModalClose} // Close modal handler
-          questionId={questionId}
-          question={question} // Pass the question ID
-          onQuestionUpdated={handleQuestionUpdated} // Callback after update
-        />
-      </Box>
-
-      {/* Votes */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderTop: "0.5px solid",
-          borderBottom: "0.5px solid",
-          borderColor: "gray.darker",
-          py: 1,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-          }}
-        >
-          <IconWithCount
-            icon={ThumbUpOffAltIcon}
-            hoverIcon={ThumbUpIcon}
-            count={question.votes.upvotes}
-            onClick={() => console.log("Upvote clicked")}
-            label=""
-          />
-          <IconWithCount
-            icon={ThumbDownOffAltIcon}
-            hoverIcon={ThumbDownIcon}
-            count={question.votes.downvotes}
-            onClick={() => console.log("Downvote clicked")}
-            label=""
-          />
-        </Box>
-        <IconWithCount
-          icon={CommentRoundedIcon}
-          count={question.answers.length}
-          onClick={() => console.log("Answers clicked")}
-          label=""
-        />
-      </Box>
-
-      {/* Answers */}
-      {question.answers.map((answer) => (
-        <Box
-          key={answer.answerId}
-          sx={{
-            borderBottom: "1px solid",
-            borderColor: "gray.darker",
-            py: 2,
-          }}
-        >
-          <Box display="flex" alignItems="center" gap="0.5rem" mb={1}>
-            <Avatar
-              {...(answer.author?.profilePic?.mediaUrl
-                ? { src: answer.author?.profilePic?.mediaUrl }
-                : {
-                    children: answer.author?.username?.charAt(0).toUpperCase(),
-                  })}
+            <Box
               sx={{
-                width: 40,
-                height: 40,
-                backgroundColor: !answer.author.profilePic
-                  ? "primary.main"
-                  : "transparent",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-            />
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: "bold", color: "white" }}
             >
-              {answer.author.username}
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: "normal",
+                  color: "common.white",
+                }}
+              >
+                {`@${question.author.username}`}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "gray.light",
+                }}
+              >
+                {formatISODate(question.createdAt)}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Question Title and Body */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.25rem",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                color: "common.white",
+              }}
+            >
+              {question.title}
             </Typography>
             <Typography
-              variant="caption"
+              variant="body2"
               sx={{
                 color: "gray.light",
               }}
             >
-              {new Date(answer.createdAt).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "2-digit",
-              })}
+              {question.body}
             </Typography>
           </Box>
-          <Typography
-            variant="body2"
+
+          <Box
             sx={{
-              color: "gray.light",
-              mb: 1,
+              display: "flex",
+              flexDirection: "column",
+              // alignItems: "center",
+              // justifyContent: "center",
             }}
           >
-            {answer.body}
-          </Typography>
-        </Box>
-      ))}
+            {/* Tags */}
+            <TagChips tags={question.tags} />
+            <MediaCarousel media={question.media} />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              <QuestionMenu
+                authorId={question.author.userId}
+                onEdit={handleEditClick}
+                onDelete={() => console.log("Delete Post Clicked")}
+                onBookmark={() => console.log("Bookmark Post Clicked")}
+                onReport={() => console.log("Report Post Clicked")}
+              />
+            </Box>
+            <EditQuestionModal
+              open={isEditModalOpen} // Modal open state
+              onClose={handleEditModalClose} // Close modal handler
+              questionId={questionId}
+              question={question} // Pass the question ID
+              onQuestionUpdated={handleQuestionUpdated} // Callback after update
+            />
+          </Box>
 
-      {/* Add New Answer */}
-      {/* <Box
+          {/* Votes */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderTop: "0.5px solid",
+              borderBottom: "0.5px solid",
+              borderColor: "gray.darker",
+              py: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <IconWithCount
+                icon={ThumbUpOffAltIcon}
+                hoverIcon={ThumbUpIcon}
+                count={question.votes.upvotes}
+                onClick={() => console.log("Upvote clicked")}
+                label=""
+              />
+              <IconWithCount
+                icon={ThumbDownOffAltIcon}
+                hoverIcon={ThumbDownIcon}
+                count={question.votes.downvotes}
+                onClick={() => console.log("Downvote clicked")}
+                label=""
+              />
+            </Box>
+            <IconWithCount
+              icon={CommentRoundedIcon}
+              count={question.answers.length}
+              onClick={() => console.log("Answers clicked")}
+              label=""
+            />
+          </Box>
+
+          {/* Answers */}
+          {question.answers.map((answer) => (
+            <Box
+              key={answer.answerId}
+              sx={{
+                borderBottom: "1px solid",
+                borderColor: "gray.darker",
+                py: 2,
+              }}
+            >
+              <Box display="flex" alignItems="center" gap="0.5rem" mb={1}>
+                <Avatar
+                  {...(answer.author?.profilePic?.mediaUrl
+                    ? { src: answer.author?.profilePic?.mediaUrl }
+                    : {
+                        children: answer.author?.username
+                          ?.charAt(0)
+                          .toUpperCase(),
+                      })}
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: !answer.author.profilePic
+                      ? "primary.main"
+                      : "transparent",
+                  }}
+                />
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", color: "white" }}
+                >
+                  {answer.author.username}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "gray.light",
+                  }}
+                >
+                  {new Date(answer.createdAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "2-digit",
+                  })}
+                </Typography>
+              </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "gray.light",
+                  mb: 1,
+                }}
+              >
+                {answer.body}
+              </Typography>
+            </Box>
+          ))}
+
+          {/* Add New Answer */}
+          {/* <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -357,6 +383,8 @@ const QuestionDetailsSection = () => {
           onClick={handlePostAnswer}
         />
       </Box> */}
+        </Box>
+      </Box>
     </Box>
   );
 };

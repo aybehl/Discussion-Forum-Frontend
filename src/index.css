@@ -1,3 +1,6 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 /* Reset */
 * {
   margin: 0;
@@ -6,7 +9,19 @@
 }
 
 /* Body and general font settings */
-body {
+/* body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f9;
+} */
+
+
+/* In your index.css or App.css */
+.slick-prev:before, .slick-next:before {
+  color: white; /* Arrow colors */
+}
+.slick-dots li button:before {
+  color: white;/* Dot colors */
+}
+.slick-dots li.slick-active button:before {
+  color: gray; /* Active dot color */
 }
