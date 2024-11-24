@@ -16,7 +16,7 @@ const MediaCarousel = ({ media }) => {
   };
 
   return (
-    <Box sx={{ mt: 2, width: "20%" }}>
+    <Box sx={{ mt: 1, width: "20%" }}>
       <Slider {...settings}>
         {media.map((file) => (
           <Box
