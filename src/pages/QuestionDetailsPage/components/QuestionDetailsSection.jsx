@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, CircularProgress, Alert, Avatar } from "@mui/material";
+import { Box, CircularProgress, Alert } from "@mui/material";
 import { getQuestionDetails } from "../../../api/questions";
 import { useUser } from "../../../contexts/UserProvider";
-import QuestionHeader from "./QuestionHeader";
+import ContentHeader from "../../../components/ContentHeader";
 import QuestionBody from "./QuestionBody";
 import TagsAndActions from "./TagsAndActions";
 import Votes from "./Votes";
@@ -11,6 +11,7 @@ import AnswerList from "./AnswerList";
 import EditQuestionModal from "./EditQuestionModal";
 import DeleteQuestionModal from "./DeleteQuestionModal";
 import { voteContent } from "../../../api/votes";
+import AuthorAvatar from "../../../components/AuthorAvatar";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -155,21 +156,7 @@ const QuestionDetailsSection = () => {
           alignItems: "flex-start",
         }}
       >
-        <Avatar
-          {...(question.author?.profilePic?.mediaUrl
-            ? { src: question.author?.profilePic?.mediaUrl }
-            : {
-                children: question.author?.username?.charAt(0).toUpperCase(),
-              })}
-          sx={{
-            width: 50,
-            height: 50,
-            backgroundColor: !question.author.profilePic
-              ? "primary.main"
-              : "transparent",
-          }}
-        />
-
+        <AuthorAvatar content={question} width={50} height={50}/>
         <Box
           sx={{
             display: "flex",
@@ -178,7 +165,7 @@ const QuestionDetailsSection = () => {
             flex: 1,
           }}
         >
-          <QuestionHeader question={question} />
+          <ContentHeader content={question} />
           <QuestionBody question={question} />
           <TagsAndActions
             question={question}
