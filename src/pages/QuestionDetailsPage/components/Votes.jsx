@@ -8,6 +8,8 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 
 const Votes = ({ votes, answerCount, onUpvote, onDownvote }) => {
+  const userVote = votes.userVote;
+
   return (
     <Box
       sx={{
@@ -33,6 +35,7 @@ const Votes = ({ votes, answerCount, onUpvote, onDownvote }) => {
           count={votes.upvotes}
           onClick={onUpvote}
           label=""
+          iconColor={userVote === "UPVOTE" ? "primary.main": null}
         />
         <IconWithCount
           icon={ThumbDownOffAltIcon}
@@ -40,6 +43,7 @@ const Votes = ({ votes, answerCount, onUpvote, onDownvote }) => {
           count={votes.downvotes}
           onClick={onDownvote}
           label=""
+          iconColor={userVote === "DOWNVOTE" ? "primary.main": null}
         />
       </Box>
       <IconWithCount

@@ -10,12 +10,14 @@ import Votes from "./Votes";
 import AnswerList from "./AnswerList";
 import EditQuestionModal from "./EditQuestionModal";
 import DeleteQuestionModal from "./DeleteQuestionModal";
+import { voteContent } from "../../../api/votes";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
   const [question, setQuestion] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+  const userId = sessionStorage.getItem("userId");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -24,7 +26,7 @@ const QuestionDetailsSection = () => {
     const fetchQuestionDetails = async () => {
       setIsLoading(true);
       try {
-        const data = await getQuestionDetails(questionId, user?.userId);
+        const data = await getQuestionDetails(questionId, userId);
         setQuestion(data);
       } catch (error) {
         console.error("Error fetching question details:", error);
@@ -55,6 +57,40 @@ const QuestionDetailsSection = () => {
 
   const handleQuestionUpdated = () => {
     setRefreshKey((prevKey) => prevKey + 1);
+  };
+
+  const handleUpvote = async () => {
+    if(!user || !question){
+      return;
+    }
+
+    try {
+      await voteContent({
+        contentId: questionId,
+        contentType: "QUESTION",
+        voteType: "UPVOTE",
+        votedById: userId,
+      });
+      setRefreshKey((prev) => prev + 1);
+    } catch(error){
+      console.error("Error upvoting question:", error);
+    }
+  };
+
+  const handleDownvote = async () => {
+    if (!user || !question) return;
+
+    try {
+      await voteContent({
+        contentId: questionId,
+        contentType: "QUESTION",
+        voteType: "DOWNVOTE",
+        votedById: userId,
+      });
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error downvoting question:", error);
+    }
   };
 
   if (isLoading) {
@@ -149,7 +185,7 @@ const QuestionDetailsSection = () => {
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
           />
-          <Votes votes={question.votes} answerCount={question.answers.length} />
+          <Votes votes={question.votes} answerCount={question.answers.length} onUpvote={handleUpvote} onDownvote={handleDownvote}/>
           <AnswerList answers={question.answers} />
           <EditQuestionModal
             open={isEditModalOpen}

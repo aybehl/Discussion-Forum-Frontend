@@ -7,6 +7,8 @@ const IconWithCount = ({
   count,
   onClick,
   label,
+  iconColor,
+  hoverColor
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -20,9 +22,9 @@ const IconWithCount = ({
         alignItems: "center",
         gap: "0.25rem",
         cursor: "pointer",
-        color: "gray.light",
+        color: iconColor != null ? iconColor: "gray.light",
         "&:hover": {
-          color: "primary.main",
+          color: hoverColor != null ? hoverColor: "primary.main",
         },
       }}
     >
