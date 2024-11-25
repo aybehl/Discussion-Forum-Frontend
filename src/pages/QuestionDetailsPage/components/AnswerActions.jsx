@@ -1,14 +1,31 @@
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import IconWithCount from "../../../components/IconWithCount";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
+import ContentMenu from "./ContentMenu";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {useState} from "react";
 
-const AnswerActions = ({ votes, commentCount, onUpvote, onDownvote }) => {
+const AnswerActions = ({
+  authorId,
+  votes,
+  commentCount,
+  onUpvote,
+  onDownvote,
+  onEdit,
+  onDelete,
+  comments,
+}) => {
   const userVote = votes.userVote;
-  
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
     <Box
       sx={{
@@ -34,6 +51,16 @@ const AnswerActions = ({ votes, commentCount, onUpvote, onDownvote }) => {
           onClick={() => console.log("Answers clicked")}
           label=""
         />
+        <IconButton
+          onClick={handleToggleExpand}
+          sx={{
+            transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.3s ease",
+            color: "gray.light",
+          }}
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </Box>
       <Box
         sx={{
@@ -57,6 +84,15 @@ const AnswerActions = ({ votes, commentCount, onUpvote, onDownvote }) => {
           onClick={onDownvote}
           label=""
           iconColor={userVote === "DOWNVOTE" ? "primary.main" : null}
+        />
+        <ContentMenu
+          authorId={authorId}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          editText={"Edit Answer"}
+          deleteText={"Delete Answer"}
+          onBookmark={() => console.log("Bookmark Answer Clicked")}
+          onReport={() => console.log("Report Answer Clicked")}
         />
       </Box>
     </Box>

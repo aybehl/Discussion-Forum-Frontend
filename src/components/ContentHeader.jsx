@@ -4,11 +4,6 @@ import { formatISODate } from "../utils/dateUtils";
 
 const ContentHeader = ({ content }) => {
   return (
-  //   <Box
-  //   sx={{
-  //     pt: 1,
-  //   }}
-  // >
     <Box
       sx={{
         pt: 1,
@@ -38,7 +33,6 @@ const ContentHeader = ({ content }) => {
         {formatISODate(content.createdAt)}
       </Typography>
     </Box>
-  // </Box>
   );
 };
 

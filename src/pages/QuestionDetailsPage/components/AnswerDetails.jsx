@@ -2,12 +2,13 @@ import { Box, Typography } from "@mui/material";
 import AuthorAvatar from "../../../components/AuthorAvatar";
 import ContentHeader from "../../../components/ContentHeader";
 import AnswerActions from "./AnswerActions";
+import { voteContent } from "./../../../api/votes";
 
-const AnswerDetails = ({ answer}) => {
+const AnswerDetails = ({ answer }) => {
   const userId = sessionStorage.getItem("userId");
 
   const handleUpvote = async () => {
-    if(!answer){
+    if (!answer) {
       return;
     }
 
@@ -18,8 +19,7 @@ const AnswerDetails = ({ answer}) => {
         voteType: "UPVOTE",
         votedById: userId,
       });
-      setRefreshKey((prev) => prev + 1);
-    } catch(error){
+    } catch (error) {
       console.error("Error upvoting question:", error);
     }
   };
@@ -34,46 +34,62 @@ const AnswerDetails = ({ answer}) => {
         voteType: "DOWNVOTE",
         votedById: userId,
       });
-      setRefreshKey((prev) => prev + 1);
     } catch (error) {
       console.error("Error downvoting question:", error);
     }
   };
 
+  const handleDeleteClick = () => {
+    console.log("delete answer");
+  };
+
+  const handleEditClick = () => {
+    console.log("edit answer");
+  };
+
   return (
+    <Box
+      sx={{
+        display: "flex",
+        gap: "1rem",
+        alignItems: "flex-start",
+        width: "100%",
+      }}
+    >
+      <AuthorAvatar content={answer} width={40} height={40} />
       <Box
         sx={{
           display: "flex",
-          gap: "1rem",
-          alignItems: "flex-start",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "0.5rem",
+          flex: 1,
+          borderBottom: "1px solid",
+          borderColor: "gray.darker",
         }}
       >
-        <AuthorAvatar content={answer} width={40} height={40}/>
-        <Box
+        <ContentHeader content={answer} />
+        <Typography
+          variant="body2"
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            gap: "0.5rem",
-            flex: 1,
-            borderBottom: "1px solid",
-            borderColor: "gray.darker",
-            width: "100%"
+            color: "gray.light",
+            mb: 2,
           }}
         >
-          <ContentHeader content={answer} />
-          <Typography
-            variant="body2"
-            sx={{
-              color: "gray.light",
-              mb: 2,
-            }}
-          >
-            {answer.body}
-          </Typography>
-          <AnswerActions votes={answer.votes} commentCount={answer.comments?.length} onUpvote={handleUpvote} onDownvote={handleDownvote}/>
-        </Box>
+          {answer.body}
+        </Typography>
+        <AnswerActions
+          authorId={answer.author.userId}
+          votes={answer.votes}
+          commentCount={answer.comments?.length}
+          onUpvote={handleUpvote}
+          onDownvote={handleDownvote}
+          onEdit={handleEditClick}
+          onDelete={handleDeleteClick}
+          comments={answer.comments}
+        />
       </Box>
+    </Box>
   );
 };
 

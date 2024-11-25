@@ -16,5 +16,4 @@ export const voteContent = async ({ contentId, contentType, voteType, votedById 
     console.error("Error occurred when calling /api/votes", error);
     throw error;
   }
-
 };

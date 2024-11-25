@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import TagChips from "../../../components/TagChips";
 import MediaCarousel from "../../../components/MediaCarousel";
-import QuestionMenu from "./QuestionMenu";
+import ContentMenu from "./ContentMenu";
 
 const TagsAndActions = ({ question, onEdit, onDelete }) => {
   return (
@@ -21,10 +21,12 @@ const TagsAndActions = ({ question, onEdit, onDelete }) => {
           justifyContent: "flex-end",
         }}
       >
-        <QuestionMenu
+        <ContentMenu
           authorId={question.author.userId}
           onEdit={onEdit}
           onDelete={onDelete}
+          editText={"Edit Post"}
+          deleteText={"Delete Post"}
           onBookmark={() => console.log("Bookmark Post Clicked")}
           onReport={() => console.log("Report Post Clicked")}
         />

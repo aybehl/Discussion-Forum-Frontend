@@ -8,7 +8,7 @@ import ReportIcon from "@mui/icons-material/Report";
 import { useUser } from "../../../contexts/UserProvider";
 import GuestPromptModal from "../../../components/GuestPromptModal";
 
-const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
+const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookmark, onReport }) => {
   const { user } = useUser();
   const userId = sessionStorage.getItem("userId");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,11 +43,11 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
               marginRight: "0.5rem",
             }}
           />
-          Edit Post
+          {editText}
         </MenuItem>,
         <MenuItem key="delete-post" onClick={onDelete}>
           <DeleteIcon sx={{ marginRight: "0.5rem" }} />
-          Delete Post
+          {deleteText}
         </MenuItem>,
       ];
     } else if (user) {
@@ -123,4 +123,4 @@ const QuestionMenu = ({ authorId, onEdit, onDelete, onBookmark, onReport }) => {
   );
 };
 
-export default QuestionMenu;
+export default ContentMenu;
