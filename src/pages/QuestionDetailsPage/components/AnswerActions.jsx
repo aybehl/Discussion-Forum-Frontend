@@ -35,7 +35,7 @@ const AnswerActions = ({
         borderTop: "0.5px solid",
         borderBottom: "0.5px solid",
         borderColor: "gray.darker",
-        py: 1,
+        py: "0.5rem",
       }}
     >
       <Box
@@ -57,9 +57,10 @@ const AnswerActions = ({
             transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.3s ease",
             color: "gray.light",
+            p: 0
           }}
         >
-          <ExpandMoreIcon />
+          <ExpandMoreIcon/>
         </IconButton>
       </Box>
       <Box
@@ -93,6 +94,8 @@ const AnswerActions = ({
           deleteText={"Delete Answer"}
           onBookmark={() => console.log("Bookmark Answer Clicked")}
           onReport={() => console.log("Report Answer Clicked")}
+          bookmarkText={"Bookmark Answer"}
+          reportText = {"Report Answer"}
         />
       </Box>
     </Box>

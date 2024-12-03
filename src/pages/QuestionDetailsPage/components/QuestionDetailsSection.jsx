@@ -12,6 +12,7 @@ import EditQuestionModal from "./EditQuestionModal";
 import DeleteQuestionModal from "./DeleteQuestionModal";
 import { voteContent } from "../../../api/votes";
 import AuthorAvatar from "../../../components/AuthorAvatar";
+import PostAnswer from "./PostAnswer";
 
 const QuestionDetailsSection = () => {
   const { questionId } = useParams();
@@ -173,7 +174,6 @@ const QuestionDetailsSection = () => {
             onDelete={handleDeleteClick}
           />
           <Votes votes={question.votes} answerCount={question.answers.length} onUpvote={handleUpvote} onDownvote={handleDownvote}/>
-          <AnswerList answers={question.answers} />
           <EditQuestionModal
             open={isEditModalOpen}
             onClose={handleEditModalClose}
@@ -189,6 +189,8 @@ const QuestionDetailsSection = () => {
           />
         </Box>
       </Box>
+      {user && <PostAnswer />}
+      <AnswerList answers={question.answers} />
     </Box>
   );
 };

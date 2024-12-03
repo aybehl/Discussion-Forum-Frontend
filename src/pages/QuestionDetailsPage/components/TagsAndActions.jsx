@@ -29,6 +29,8 @@ const TagsAndActions = ({ question, onEdit, onDelete }) => {
           deleteText={"Delete Post"}
           onBookmark={() => console.log("Bookmark Post Clicked")}
           onReport={() => console.log("Report Post Clicked")}
+          bookmarkText={"Bookmark Question"}
+          reportText = {"Report Question"}
         />
       </Box>
     </Box>

@@ -19,7 +19,7 @@ const Votes = ({ votes, answerCount, onUpvote, onDownvote }) => {
         borderTop: "0.5px solid",
         borderBottom: "0.5px solid",
         borderColor: "gray.darker",
-        py: 1,
+        py: "0.5rem",
       }}
     >
       <Box

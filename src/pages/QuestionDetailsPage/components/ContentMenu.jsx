@@ -8,7 +8,7 @@ import ReportIcon from "@mui/icons-material/Report";
 import { useUser } from "../../../contexts/UserProvider";
 import GuestPromptModal from "../../../components/GuestPromptModal";
 
-const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookmark, onReport }) => {
+const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookmark, onReport, bookmarkText, reportText }) => {
   const { user } = useUser();
   const userId = sessionStorage.getItem("userId");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,11 +55,11 @@ const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookm
       return [
         <MenuItem key="bookmark" onClick={onBookmark}>
           <BookmarkIcon sx={{ marginRight: "0.5rem" }} />
-          Bookmark Question
+          {bookmarkText}
         </MenuItem>,
         <MenuItem key="report" onClick={onReport}>
           <ReportIcon sx={{ marginRight: "0.5rem" }} />
-          Report Question
+          {reportText}
         </MenuItem>,
       ];
     }
@@ -78,6 +78,7 @@ const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookm
           "&:hover": {
             color: "primary.main",
           },
+          padding: 0
         }}
       >
         <MoreVertIcon sx={{ fontSize: "1.25rem" }} />
