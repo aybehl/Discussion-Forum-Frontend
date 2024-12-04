@@ -56,7 +56,13 @@ const AnswerDetails = ({ answer }) => {
         width: "100%",
       }}
     >
-      <AuthorAvatar content={answer} width={40} height={40} />
+      <AuthorAvatar
+        width={40}
+        height={40}
+        username={answer.author?.username}
+        profilePicUrl={answer.author?.profilePic?.mediaUrl}
+        margin={"0.5rem 0"}
+      />
       <Box
         sx={{
           display: "flex",
@@ -64,8 +70,6 @@ const AnswerDetails = ({ answer }) => {
           justifyContent: "center",
           gap: "0.5rem",
           flex: 1,
-          borderBottom: "1px solid",
-          borderColor: "gray.darker",
         }}
       >
         <ContentHeader content={answer} />

@@ -25,7 +25,10 @@ const CustomButton = ({
           backgroundColor: `${bgColor}CC`,
         }
       }}
-      onClick={onClick}
+      onClick={() => {
+        console.log("Button clicked");
+        onClick();
+      }}
       type={type}
     >
       <Typography variant={textVariant}>{content}</Typography>

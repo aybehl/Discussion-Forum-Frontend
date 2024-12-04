@@ -61,8 +61,12 @@ const QuestionDetailsSection = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
 
+  const onAnswerPosted = () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
+
   const handleUpvote = async () => {
-    if(!user || !question){
+    if (!user || !question) {
       return;
     }
 
@@ -74,7 +78,7 @@ const QuestionDetailsSection = () => {
         votedById: userId,
       });
       setRefreshKey((prev) => prev + 1);
-    } catch(error){
+    } catch (error) {
       console.error("Error upvoting question:", error);
     }
   };
@@ -147,7 +151,6 @@ const QuestionDetailsSection = () => {
         borderColor: "gray.darker",
         display: "flex",
         flexDirection: "column",
-        gap: "0.5rem",
       }}
     >
       <Box
@@ -157,7 +160,12 @@ const QuestionDetailsSection = () => {
           alignItems: "flex-start",
         }}
       >
-        <AuthorAvatar content={question} width={50} height={50}/>
+        <AuthorAvatar
+          width={50}
+          height={50}
+          username={question.author?.username}
+          profilePicUrl={question.author?.profilePic?.mediaUrl}
+        />
         <Box
           sx={{
             display: "flex",
@@ -173,7 +181,12 @@ const QuestionDetailsSection = () => {
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}
           />
-          <Votes votes={question.votes} answerCount={question.answers.length} onUpvote={handleUpvote} onDownvote={handleDownvote}/>
+          <Votes
+            votes={question.votes}
+            answerCount={question.answers.length}
+            onUpvote={handleUpvote}
+            onDownvote={handleDownvote}
+          />
           <EditQuestionModal
             open={isEditModalOpen}
             onClose={handleEditModalClose}
@@ -189,7 +202,9 @@ const QuestionDetailsSection = () => {
           />
         </Box>
       </Box>
-      {user && <PostAnswer />}
+      {user && (
+        <PostAnswer questionId={questionId} onAnswerPosted={onAnswerPosted} />
+      )}
       <AnswerList answers={question.answers} />
     </Box>
   );

@@ -1,19 +1,18 @@
 import { Avatar } from "@mui/material";
 
-const AuthorAvatar = ({ content, width, height }) => {
+const AuthorAvatar = ({ width, height, profilePicUrl, username, margin }) => {
   return (
     <Avatar
-      {...(content.author?.profilePic?.mediaUrl
-        ? { src: content.author?.profilePic?.mediaUrl }
+      {...(profilePicUrl
+        ? { src: profilePicUrl }
         : {
-            children: content.author?.username?.charAt(0).toUpperCase(),
+            children: username?.charAt(0).toUpperCase(),
           })}
       sx={{
-        width: {width},
-        height: {height},
-        backgroundColor: !content.author.profilePic
-          ? "primary.main"
-          : "transparent",
+        width: { width },
+        height: { height },
+        backgroundColor: !profilePicUrl ? "primary.main" : "transparent",
+        margin
       }}
     />
   );
