@@ -3,10 +3,13 @@ import AuthorAvatar from "../../../components/AuthorAvatar";
 import ContentHeader from "../../../components/ContentHeader";
 import AnswerActions from "./AnswerActions";
 import { voteContent } from "./../../../api/votes";
+import { useState } from "react";
+import EditAnswerModal from "./EditAnswerModal";
 
 const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
-  
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const handleUpvote = async () => {
     if (!answer) {
       return;
@@ -48,7 +51,11 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   };
 
   const handleEditClick = () => {
-    console.log("edit answer");
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
   };
 
   return (
@@ -95,6 +102,12 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
           comments={answer.comments}
+        />
+        <EditAnswerModal
+          open={isEditModalOpen}
+          onClose={handleEditModalClose}
+          answer={answer}
+          onAnswerUpdated={onAnswerUpdated}
         />
       </Box>
     </Box>

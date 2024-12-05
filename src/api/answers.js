@@ -13,3 +13,13 @@ export const postAnswer = async ({ body, questionId }) => {
     throw error;
   }
 };
+
+export const updateAnswer = async (answerId, data) => {
+  try {
+    const response = await axiosInstance.put(`/api/answers/${answerId}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating answer:", error);
+    throw error;
+  }
+};
