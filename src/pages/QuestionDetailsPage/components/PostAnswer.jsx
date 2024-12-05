@@ -31,7 +31,6 @@ const PostAnswer = ({ questionId, onAnswerPosted }) => {
   };
 
   const handlePostAnswer = async () => {
-    console.log("Hi");
     if (!answerBody.trim()) {
       setError(true);
       return;
@@ -42,7 +41,7 @@ const PostAnswer = ({ questionId, onAnswerPosted }) => {
         questionId,
         body: answerBody
       };
-      console.log('payload - ', payload);
+
       await postAnswer(payload);
 
       setAnswerBody("");

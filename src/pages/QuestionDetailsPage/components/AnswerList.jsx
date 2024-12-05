@@ -1,8 +1,7 @@
 import AnswerDetails from "./AnswerDetails";
 import { Box } from "@mui/material";
 
-const AnswerList = ({ answers }) => {
-
+const AnswerList = ({ answers, onAnswerUpdated }) => {
   return (
     <Box
       sx={{
@@ -12,7 +11,13 @@ const AnswerList = ({ answers }) => {
         flexDirection: "column",
       }}
     >
-      {answers.map((answer) => <AnswerDetails key={answer.answerId} answer={answer}/>)}
+      {answers.map((answer) => (
+        <AnswerDetails
+          key={answer.answerId}
+          answer={answer}
+          onAnswerUpdated={onAnswerUpdated}
+        />
+      ))}
     </Box>
   );
 };

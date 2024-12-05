@@ -4,14 +4,14 @@ import ContentHeader from "../../../components/ContentHeader";
 import AnswerActions from "./AnswerActions";
 import { voteContent } from "./../../../api/votes";
 
-const AnswerDetails = ({ answer }) => {
+const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
-
+  
   const handleUpvote = async () => {
     if (!answer) {
       return;
     }
-
+    
     try {
       await voteContent({
         contentId: answer.answerId,
@@ -19,6 +19,8 @@ const AnswerDetails = ({ answer }) => {
         voteType: "UPVOTE",
         votedById: userId,
       });
+
+      onAnswerUpdated();
     } catch (error) {
       console.error("Error upvoting question:", error);
     }
@@ -26,7 +28,7 @@ const AnswerDetails = ({ answer }) => {
 
   const handleDownvote = async () => {
     if (!answer) return;
-
+    
     try {
       await voteContent({
         contentId: answer.answerId,
@@ -34,6 +36,8 @@ const AnswerDetails = ({ answer }) => {
         voteType: "DOWNVOTE",
         votedById: userId,
       });
+
+      onAnswerUpdated();
     } catch (error) {
       console.error("Error downvoting question:", error);
     }

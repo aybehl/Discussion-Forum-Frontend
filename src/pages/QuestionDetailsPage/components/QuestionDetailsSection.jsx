@@ -205,7 +205,10 @@ const QuestionDetailsSection = () => {
       {user && (
         <PostAnswer questionId={questionId} onAnswerPosted={onAnswerPosted} />
       )}
-      <AnswerList answers={question.answers} />
+      <AnswerList
+        answers={question.answers}
+        onAnswerUpdated={() => setRefreshKey((prevKey) => prevKey + 1)}
+      />
     </Box>
   );
 };
