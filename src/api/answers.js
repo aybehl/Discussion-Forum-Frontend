@@ -23,3 +23,13 @@ export const updateAnswer = async (answerId, data) => {
     throw error;
   }
 };
+
+export const deleteAnswer = async (answerId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/answers/${answerId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting answer:", error);
+    throw error;
+  }
+};

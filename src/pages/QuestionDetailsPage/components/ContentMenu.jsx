@@ -8,7 +8,18 @@ import ReportIcon from "@mui/icons-material/Report";
 import { useUser } from "../../../contexts/UserProvider";
 import GuestPromptModal from "../../../components/GuestPromptModal";
 
-const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookmark, onReport, bookmarkText, reportText }) => {
+const ContentMenu = ({
+  authorId,
+  onEdit,
+  onDelete,
+  editText,
+  deleteText,
+  onBookmark,
+  onReport,
+  bookmarkText,
+  reportText,
+  disabled = false,
+}) => {
   const { user } = useUser();
   const userId = sessionStorage.getItem("userId");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -17,6 +28,8 @@ const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookm
   const isMenuOpen = Boolean(anchorEl);
 
   const handleMenuOpen = (event) => {
+    if (disabled) return;
+
     if (!user) {
       setIsGuestModalOpen(true);
       return;
@@ -72,13 +85,14 @@ const ContentMenu = ({ authorId, onEdit, onDelete, editText, deleteText, onBookm
       {/* Three-dot icon button */}
       <IconButton
         aria-label="options"
-        onClick={handleMenuOpen}
+        onClick={disabled? null: handleMenuOpen}
         sx={{
-          color: "gray.light",
+          color: disabled ? "gray.main" : "gray.light", // Apply correct color based on disabled state
           "&:hover": {
-            color: "primary.main",
+            color: disabled ? "gray.main" : "primary.main", // Prevent hover effect when disabled
           },
-          padding: 0
+          padding: 0,
+          cursor: disabled ? "not-allowed" : "pointer", // Explicitly set cursor style
         }}
       >
         <MoreVertIcon sx={{ fontSize: "1.25rem" }} />

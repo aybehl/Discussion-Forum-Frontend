@@ -5,13 +5,15 @@ import AnswerActions from "./AnswerActions";
 import { voteContent } from "./../../../api/votes";
 import { useState } from "react";
 import EditAnswerModal from "./EditAnswerModal";
+import DeleteAnswerModal from "./DeleteAnswerModal";
 
 const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleUpvote = async () => {
-    if (!answer) {
+    if (!answer || answer.deleted) {
       return;
     }
     
@@ -30,7 +32,7 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   };
 
   const handleDownvote = async () => {
-    if (!answer) return;
+    if (!answer || answer.deleted) return;
     
     try {
       await voteContent({
@@ -47,15 +49,20 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   };
 
   const handleDeleteClick = () => {
-    console.log("delete answer");
+    setIsDeleteModalOpen(true);
   };
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
+    handleDeleteModalClose();
   };
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
+  };
+
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalOpen(false);
   };
 
   return (
@@ -87,11 +94,12 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
         <Typography
           variant="body2"
           sx={{
-            color: "gray.light",
+            color: answer.deleted ? "gray.dark" : "gray.light",
+            fontStyle: answer.deleted ? "italic" : "normal", // Italic for deleted reason
             mb: 2,
           }}
         >
-          {answer.body}
+          {answer.deleted ? `This answer has been deleted: ${answer.deletedReason}` : answer.body}
         </Typography>
         <AnswerActions
           authorId={answer.author.userId}
@@ -102,12 +110,21 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
           comments={answer.comments}
+          isDisabled={answer.deleted}
         />
         <EditAnswerModal
           open={isEditModalOpen}
           onClose={handleEditModalClose}
           answer={answer}
           onAnswerUpdated={onAnswerUpdated}
+        />
+        <DeleteAnswerModal
+          open={isDeleteModalOpen}
+          onClose={handleDeleteModalClose}
+          answerId={answer.answerId}
+          onAnswerUpdated={onAnswerUpdated}
+          onEdit={handleEditClick}
+          onAnswerDeleted={onAnswerUpdated}
         />
       </Box>
     </Box>

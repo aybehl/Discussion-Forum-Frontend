@@ -18,6 +18,7 @@ const AnswerActions = ({
   onEdit,
   onDelete,
   comments,
+  isDisabled
 }) => {
   const userVote = votes.userVote;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -32,7 +33,7 @@ const AnswerActions = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        borderTop: "0.5px solid",
+        // borderTop: "0.5px solid",
         borderBottom: "0.5px solid",
         borderColor: "gray.darker",
         py: "0.5rem",
@@ -50,9 +51,11 @@ const AnswerActions = ({
           count={commentCount}
           onClick={() => console.log("Answers clicked")}
           label=""
+          disabled={isDisabled}
         />
         <IconButton
           onClick={handleToggleExpand}
+          disabled={isDisabled}
           sx={{
             transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.3s ease",
@@ -77,6 +80,7 @@ const AnswerActions = ({
           onClick={onUpvote}
           label=""
           iconColor={userVote === "UPVOTE" ? "primary.main" : null}
+          disabled={isDisabled}
         />
         <IconWithCount
           icon={ThumbDownOffAltIcon}
@@ -85,6 +89,7 @@ const AnswerActions = ({
           onClick={onDownvote}
           label=""
           iconColor={userVote === "DOWNVOTE" ? "primary.main" : null}
+          disabled={isDisabled}
         />
         <ContentMenu
           authorId={authorId}
@@ -96,6 +101,7 @@ const AnswerActions = ({
           onReport={() => console.log("Report Answer Clicked")}
           bookmarkText={"Bookmark Answer"}
           reportText = {"Report Answer"}
+          disabled={isDisabled}
         />
       </Box>
     </Box>

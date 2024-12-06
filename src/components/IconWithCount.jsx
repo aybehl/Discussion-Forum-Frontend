@@ -8,23 +8,26 @@ const IconWithCount = ({
   onClick,
   label,
   iconColor,
-  hoverColor
+  hoverColor,
+  disabled = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Box
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onClick={disabled ? null : onClick}
+      onMouseEnter={() => !disabled && setIsHovered(true)}
+      onMouseLeave={() => !disabled && setIsHovered(false)}
       sx={{
         display: "flex",
         alignItems: "center",
         gap: "0.25rem",
-        cursor: "pointer",
-        color: iconColor != null ? iconColor: "gray.light",
+        cursor: disabled ? "not-allowed" : "pointer",
+        color: disabled
+          ? "gray.main" // Apply disabled color
+          : iconColor || "gray.light",
         "&:hover": {
-          color: hoverColor != null ? hoverColor: "primary.main",
+          color: !disabled && (hoverColor || "primary.main"), // Only apply hover styles if not disabled
         },
       }}
     >
@@ -40,6 +43,7 @@ const IconWithCount = ({
         variant="subtitle2"
         sx={{
           fontWeight: "normal",
+          color: disabled ? "gray.main" : "inherit",
         }}
       >
         {count} {label}
