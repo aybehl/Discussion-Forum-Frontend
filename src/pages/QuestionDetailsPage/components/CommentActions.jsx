@@ -1,67 +1,33 @@
-import { Box, IconButton } from "@mui/material";
+import { Box } from "@mui/material";
 import IconWithCount from "../../../components/IconWithCount";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import ContentMenu from "./ContentMenu";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const AnswerActions = ({
+const CommentActions = ({
   authorId,
   votes,
-  commentCount,
   onUpvote,
   onDownvote,
   onEdit,
   onDelete,
   isDisabled,
-  isExpanded,
-  setIsExpanded
 }) => {
   const userVote = votes.userVote;
-
-  const handleToggleExpand = () => {
-    setIsExpanded((prev) => !prev);
-  };
 
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         borderBottom: "0.5px solid",
         borderColor: "gray.darker",
         py: "0.5rem",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
-        <IconWithCount
-          icon={CommentRoundedIcon}
-          count={commentCount}
-          label=""
-        />
-        <IconButton
-          onClick={handleToggleExpand}
-          sx={{
-            transform: !isDisabled && isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.3s ease",
-            color: "gray.light",
-            p: 0,
-            cursor: isDisabled ? "not-allowed" : "pointer",
-          }}
-        >
-          <ExpandMoreIcon/>
-        </IconButton>
-      </Box>
       <Box
         sx={{
           display: "flex",
@@ -91,12 +57,12 @@ const AnswerActions = ({
           authorId={authorId}
           onEdit={onEdit}
           onDelete={onDelete}
-          editText={"Edit Answer"}
-          deleteText={"Delete Answer"}
-          onBookmark={() => console.log("Bookmark Answer Clicked")}
-          onReport={() => console.log("Report Answer Clicked")}
-          bookmarkText={"Bookmark Answer"}
-          reportText = {"Report Answer"}
+          editText={"Edit Comment"}
+          deleteText={"Delete Comment"}
+          onBookmark={() => console.log("Bookmark Comment Clicked")}
+          onReport={() => console.log("Report Comment Clicked")}
+          bookmarkText={"Bookmark Comment"}
+          reportText = {"Report Comment"}
           disabled={isDisabled}
         />
       </Box>
@@ -104,4 +70,4 @@ const AnswerActions = ({
   );
 };
 
-export default AnswerActions;
+export default CommentActions;

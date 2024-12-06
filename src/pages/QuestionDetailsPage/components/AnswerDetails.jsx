@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Collapse } from "@mui/material";
 import AuthorAvatar from "../../../components/AuthorAvatar";
 import ContentHeader from "../../../components/ContentHeader";
 import AnswerActions from "./AnswerActions";
@@ -6,17 +6,19 @@ import { voteContent } from "./../../../api/votes";
 import { useState } from "react";
 import EditAnswerModal from "./EditAnswerModal";
 import DeleteAnswerModal from "./DeleteAnswerModal";
+import CommentDetails from "./CommentDetails";
 
 const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleUpvote = async () => {
     if (!answer || answer.deleted) {
       return;
     }
-    
+
     try {
       await voteContent({
         contentId: answer.answerId,
@@ -27,13 +29,13 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
 
       onAnswerUpdated();
     } catch (error) {
-      console.error("Error upvoting question:", error);
+      console.error("Error upvoting answer:", error);
     }
   };
 
   const handleDownvote = async () => {
     if (!answer || answer.deleted) return;
-    
+
     try {
       await voteContent({
         contentId: answer.answerId,
@@ -44,7 +46,7 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
 
       onAnswerUpdated();
     } catch (error) {
-      console.error("Error downvoting question:", error);
+      console.error("Error downvoting answer:", error);
     }
   };
 
@@ -99,7 +101,9 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
             mb: 2,
           }}
         >
-          {answer.deleted ? `This answer has been deleted: ${answer.deletedReason}` : answer.body}
+          {answer.deleted
+            ? `This answer has been deleted: ${answer.deletedReason}`
+            : answer.body}
         </Typography>
         <AnswerActions
           authorId={answer.author.userId}
@@ -109,9 +113,20 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
           onDownvote={handleDownvote}
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
-          comments={answer.comments}
           isDisabled={answer.deleted}
+          isExpanded={isExpanded}
+          setIsExpanded={setIsExpanded}
         />
+
+        {/* Comments Section */}
+        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+          <Box
+          >
+            {answer.comments.map((comment) => (
+              <CommentDetails key={comment.commentId} comment={comment} onCommentUpdated={() => onAnswerUpdated()}/>
+            ))}
+          </Box>
+        </Collapse>
         <EditAnswerModal
           open={isEditModalOpen}
           onClose={handleEditModalClose}
