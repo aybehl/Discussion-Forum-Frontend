@@ -29,7 +29,7 @@ const BioInput = ({ onChange, value }) => {
             },
           },
           "& .MuiInputBase-input": {
-            fontSize: "1rem", // Font size for input text
+            fontSize: "0.8rem", // Font size for input text
             padding: "0.5rem 0", // Additional padding inside the input
           },
           "& .MuiInputBase-input::placeholder": {

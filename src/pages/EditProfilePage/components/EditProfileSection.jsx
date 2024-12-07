@@ -6,6 +6,7 @@ import ProfileDetail from "./ProfileDetail";
 import { formatISODate } from "../../../utils/dateUtils";
 import { useNavigate } from "react-router-dom";
 import EditProfileModal from "./EditProfileModal";
+import CustomButton from "../../../components/CustomButton";
 
 const EditProfileSection = () => {
   const { user, logout } = useUser();
@@ -132,18 +133,17 @@ const EditProfileSection = () => {
         >
           Want to log out?
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
+        <CustomButton
+          variant="outlined"
+          bgColor="primary"
+          textColor="primary.main"
+          size="large"
+          padding={"0.5rem 1rem"}
+          borderRadius={"0.5rem"}
+          content={"Log Out"}
           onClick={handleLogout}
-          sx={{
-            textTransform: "none",
-            borderRadius: "8px",
-            padding: "0.5rem 1.5rem",
-          }}
-        >
-          Log Out
-        </Button>
+          textVariant="outlined"
+        />
       </Box>
       <EditProfileModal open={isEditModalOpen} onClose={handleCloseEditModal} />
     </Box>

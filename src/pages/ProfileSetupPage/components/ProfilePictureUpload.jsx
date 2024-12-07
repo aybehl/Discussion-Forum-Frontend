@@ -10,7 +10,7 @@ const ProfilePictureUpload = ({ onUpload, profilePic }) => {
   const fileInputRef = useRef(null);
   const [image, setImage] = useState(null);
   const [fileName, setFileName] = useState("");
-  console.log('profilePic - ', profilePic);
+
   const handleFileChange = (event) => {
 
     const file = event.target.files[0];

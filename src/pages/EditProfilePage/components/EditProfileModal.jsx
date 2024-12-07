@@ -28,9 +28,6 @@ const EditProfileModal = ({ open, onClose }) => {
     profilePicture: user?.profilePic || null,
   });
 
-  console.log('user - ', user);
-  console.log('profileData - ', profileData);
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (field, value) => {
