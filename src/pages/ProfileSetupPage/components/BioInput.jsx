@@ -1,7 +1,7 @@
 import { useTheme } from "@emotion/react";
 import { TextField, Typography, Box } from "@mui/material";
 
-const BioInput = ({ onChange }) => {
+const BioInput = ({ onChange, value }) => {
   const theme = useTheme();
   
   return (
@@ -15,6 +15,7 @@ const BioInput = ({ onChange }) => {
         rows={4}
         fullWidth
         variant="outlined"
+        value={value}
         onChange={(e) => onChange(e.target.value)}
         sx={{
           "&:hover": {

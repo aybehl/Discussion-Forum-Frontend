@@ -17,7 +17,7 @@ import { editUserProfile } from "../../../api/user";
 import { useUser } from "../../../contexts/UserProvider";
 
 const EditProfileModal = ({ open, onClose }) => {
-  const { user } = useUser();
+  const { user, login } = useUser();
 
   const [profileData, setProfileData] = useState({
     firstName: user?.firstName || "",
@@ -25,8 +25,11 @@ const EditProfileModal = ({ open, onClose }) => {
     userName: user?.userName || "",
     email: user?.email || "",
     bio: user?.bio || "",
-    profilePicture: user?.profilePicture || null,
+    profilePicture: user?.profilePic || null,
   });
+
+  console.log('user - ', user);
+  console.log('profileData - ', profileData);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -34,13 +37,14 @@ const EditProfileModal = ({ open, onClose }) => {
     setProfileData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    
     try {
       const userId = sessionStorage.getItem("userId");
       const response = await editUserProfile(userId, profileData);
 
       if (response.status === "SUCCESS" && response.statusCode === 200) {
+        await login(sessionStorage.getItem("jwtToken"));
         onClose(); // Close the modal after successful update
       } else if (response.status === "ERROR") {
         setErrorMessage(response.message);
@@ -53,7 +57,7 @@ const EditProfileModal = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>
+      <DialogTitle sx={{ padding: 0, mx: 2, my: 2 }}>
         <Typography variant="h6" align="center">
           Edit Profile
         </Typography>
@@ -71,6 +75,7 @@ const EditProfileModal = ({ open, onClose }) => {
         >
           <ProfilePictureUpload
             onUpload={(file) => handleInputChange("profilePicture", file)}
+            profilePic={profileData.profilePicture}
           />
           <Divider sx={{ width: "100%" }} />
           <Box
@@ -128,18 +133,28 @@ const EditProfileModal = ({ open, onClose }) => {
           {errorMessage && <ErrorMessage message={errorMessage} />}
         </Box>
       </DialogContent>
-      <DialogActions>
-        <CustomButton
+      <DialogActions sx={{ padding: 0, mx: 2, my: 2 }}>
+       <CustomButton
           variant="text"
-          color="secondary"
+          bgColor="secondary"
+          textColor="gray.darker"
+          size="small"
+          padding={"0.5rem 1rem"}
+          borderRadius={"0.5rem"}
+          content={"Cancel"}
           onClick={onClose}
-          content="Cancel"
+          textVariant="outlined"
         />
         <CustomButton
           variant="contained"
-          color="primary"
-          content="Save Changes"
+          bgColor="primary"
+          textColor="common.white"
+          size="small"
+          padding={"0.5rem 1rem"}
+          borderRadius={"0.5rem"}
+          content={"Save Changes"}
           onClick={handleSubmit}
+          textVariant="outlined"
         />
       </DialogActions>
     </Dialog>

@@ -1,6 +1,9 @@
 import {format, parseISO} from 'date-fns';
 
 export const formatISODate = (isoString) => {
+  if(!isoString){
+    return;
+  }
   const date = parseISO(isoString);
   const day = format(date, 'do'); // Adds ordinal suffix (e.g., 5th)
   const month = format(date, 'MMM'); // Month abbreviation (e.g., Nov)

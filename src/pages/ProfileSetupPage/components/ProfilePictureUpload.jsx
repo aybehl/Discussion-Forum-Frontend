@@ -5,12 +5,12 @@ import FaceIcon from '@mui/icons-material/Face';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRef, useState } from "react";
 
-const ProfilePictureUpload = ({ onUpload }) => { 
+const ProfilePictureUpload = ({ onUpload, profilePic }) => { 
   const theme = useTheme();
   const fileInputRef = useRef(null);
   const [image, setImage] = useState(null);
   const [fileName, setFileName] = useState("");
-
+  console.log('profilePic - ', profilePic);
   const handleFileChange = (event) => {
 
     const file = event.target.files[0];
@@ -33,7 +33,7 @@ const ProfilePictureUpload = ({ onUpload }) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "2rem", width: "100%" }}>
       <Avatar
-        src={image || undefined} // Display image if available, otherwise fallback to initials
+        src={image || profilePic || undefined} // Display image if available, otherwise fallback to initials
         alt="Profile Picture"
         sx={{
           width: 150,
@@ -44,7 +44,7 @@ const ProfilePictureUpload = ({ onUpload }) => {
           fontSize: "2rem",
         }}
       >
-        {!image && <FaceIcon sx={{ fontSize: "4rem"}}/>}
+        {!(image || profilePic) && <FaceIcon sx={{ fontSize: "4rem"}}/>}
       </Avatar>
 
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0" }}>
