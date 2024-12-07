@@ -1,13 +1,14 @@
 import { Box, Typography, Avatar, CircularProgress } from "@mui/material";
 import { useUser } from "../contexts/UserProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GuestPromptModal from "./GuestPromptModal";
 import { useState } from "react";
 
 const Header = ({ variant = "default" }) => {
-  const { user, loading } = useUser();
+  const { user, loading, logout } = useUser();
   const isGuest = !user || !user.userName;
   const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleGuestModalClose = () => {
     setIsGuestModalOpen(false);
@@ -17,7 +18,13 @@ const Header = ({ variant = "default" }) => {
     if (isGuest) {
       event.preventDefault(); // Prevent navigation
       setIsGuestModalOpen(true); // Open the modal
+    } else {
+      navigate("/edit-profile"); // Navigate to Edit Profile page
     }
+  };
+
+  const handleLogoClick = () => {
+    navigate("/questions"); // Navigate to the homepage
   };
 
   if (loading) {
@@ -42,7 +49,7 @@ const Header = ({ variant = "default" }) => {
     : user.profilePic
     ? { src: user.profilePic }
     : { children: user.userName?.charAt(0).toUpperCase() };
-  
+
   return (
     <Box
       sx={{
@@ -59,7 +66,9 @@ const Header = ({ variant = "default" }) => {
         sx={{
           display: "flex",
           alignItems: "center",
+          cursor: "pointer",
         }}
+        onClick={handleLogoClick}
       >
         <img
           src="/logo.svg"
@@ -78,43 +87,39 @@ const Header = ({ variant = "default" }) => {
             gap: "1rem",
           }}
         >
-          <Link
-            to={isGuest ? "#" : "/profile"}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              cursor: "pointer",
+            }}
             onClick={handleAvatarClick}
-            style={{ textDecoration: "none" }}
           >
-            <Box
+            <Avatar
+              {...avatarContent}
+              alt="User Avatar"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
+                width: 50,
+                height: 50,
+                backgroundColor: isGuest
+                  ? "gray.main" // Background color for guest
+                  : !user.profilePic
+                  ? "primary.main" // Background color if profile picture doesn't exist
+                  : "transparent", // No background color for existing profile picture
+                color: isGuest || !user.profilePic ? "common.white" : "inherit", // Text color for guest or no profile picture
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                color: "common.white",
+                textDecoration: "none",
               }}
             >
-              <Avatar
-                {...avatarContent}
-                alt="User Avatar"
-                sx={{
-                  width: 50,
-                  height: 50,
-                  backgroundColor: isGuest
-                    ? "gray.main" // Background color for guest
-                    : !user.profilePic
-                    ? "primary.main" // Background color if profile picture doesn't exist
-                    : "transparent", // No background color for existing profile picture
-                  color: isGuest || !user.profilePic ? "common.white" : "inherit", // Text color for guest or no profile picture
-                }}
-              />
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "common.white",
-                  textDecoration: "none",
-                }}
-              >
-                {isGuest ? "Guest User" : `@${user.userName}`}
-              </Typography>
-            </Box>
-          </Link>
+              {isGuest ? "Guest User" : `@${user.userName}`}
+            </Typography>
+          </Box>
         </Box>
       )}
       {/* Modal for Guest Users */}

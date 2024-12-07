@@ -7,6 +7,7 @@ import ProfileSetupPage from "./pages/ProfileSetupPage/ProfileSetupPage";
 import { UserProvider } from "./contexts/UserProvider";
 import { TagsProvider } from "./contexts/TagsProvider";
 import QuestionDetailsPage from "./pages/QuestionDetailsPage/QuestionDetailsPage";
+import EditProfilePage from "./pages/EditProfilePage/EditProfilePage";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
               path="/questions/:questionId"
               element={<QuestionDetailsPage />}
             />
+
+            <Route path="/edit-profile" element={<EditProfilePage />} />
 
             {/* <Route path="/posts" element={<PostsPage />} />
           <Route path="/bookmarks" element={<BookmarksPage />} />
