@@ -8,6 +8,7 @@ import EditAnswerModal from "./EditAnswerModal";
 import DeleteAnswerModal from "./DeleteAnswerModal";
 import CommentDetails from "./CommentDetails";
 import PostComment from "./PostComment";
+import React from "react";
 
 const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
@@ -105,7 +106,12 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
         >
           {answer.deleted
             ? `This answer has been deleted: ${answer.deletedReason}`
-            : answer.body}
+            : answer.body.split("\n").map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
         </Typography>
         <AnswerActions
           authorId={answer.author.userId}

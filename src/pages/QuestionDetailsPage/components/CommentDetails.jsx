@@ -1,9 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import AuthorAvatar from "../../../components/AuthorAvatar";
-import ContentHeader from './../../../components/ContentHeader';
+import ContentHeader from "./../../../components/ContentHeader";
 import CommentActions from "./CommentActions";
 import { useState } from "react";
 import { voteContent } from "../../../api/votes";
+import EditCommentModal from "./EditCommentModal";
+import DeleteCommentModal from "./DeleteCommentModal";
+import React from "react";
 
 const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
   const userId = sessionStorage.getItem("userId");
@@ -24,7 +27,6 @@ const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
       });
 
       onCommentUpdated();
-      setIsExpanded(true);
     } catch (error) {
       console.error("Error upvoting comment:", error);
     }
@@ -44,7 +46,6 @@ const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
       });
 
       onCommentUpdated();
-      setIsExpanded(true);
     } catch (error) {
       console.error("Error downvoting comment:", error);
     }
@@ -83,27 +84,31 @@ const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
         margin={"0.5rem 0"}
       />
       <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            gap: "0.5rem",
-            flex: 1,
-          }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "0.5rem",
+          flex: 1,
+        }}
       >
-
         <ContentHeader content={comment} />
         <Typography
           variant="body2"
           sx={{
             color: comment.deleted ? "gray.dark" : "gray.light",
             fontStyle: comment.deleted ? "italic" : "normal", // Italic for deleted reason
-            mb: 2,
+            // mb: 2,
           }}
         >
           {comment.deleted
             ? `This comment has been deleted: ${comment.deletedReason}`
-            : comment.body}
+            : comment.body.split("\n").map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
         </Typography>
 
         <CommentActions
@@ -114,6 +119,20 @@ const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
           isDisabled={comment.deleted}
+        />
+
+        <EditCommentModal
+          open={isEditModalOpen}
+          onClose={handleEditModalClose}
+          comment={comment}
+          onCommentUpdated={onCommentUpdated}
+        />
+        <DeleteCommentModal
+          open={isDeleteModalOpen}
+          onClose={handleDeleteModalClose}
+          commentId={comment.commentId}
+          onEdit={handleEditClick}
+          onCommentDeleted={onCommentUpdated}
         />
       </Box>
     </Box>
