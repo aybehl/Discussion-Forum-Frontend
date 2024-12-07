@@ -7,12 +7,14 @@ import { useState } from "react";
 import EditAnswerModal from "./EditAnswerModal";
 import DeleteAnswerModal from "./DeleteAnswerModal";
 import CommentDetails from "./CommentDetails";
+import PostComment from "./PostComment";
 
 const AnswerDetails = ({ answer, onAnswerUpdated }) => {
   const userId = sessionStorage.getItem("userId");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
 
   const handleUpvote = async () => {
     if (!answer || answer.deleted) {
@@ -88,7 +90,6 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          gap: "0.5rem",
           flex: 1,
         }}
       >
@@ -99,6 +100,7 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
             color: answer.deleted ? "gray.dark" : "gray.light",
             fontStyle: answer.deleted ? "italic" : "normal", // Italic for deleted reason
             mb: 2,
+            mt: 1,
           }}
         >
           {answer.deleted
@@ -116,17 +118,35 @@ const AnswerDetails = ({ answer, onAnswerUpdated }) => {
           isDisabled={answer.deleted}
           isExpanded={isExpanded}
           setIsExpanded={setIsExpanded}
+          setIsCommenting={setIsCommenting}
         />
 
         {/* Comments Section */}
         <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-          <Box
-          >
+          <Box>
             {answer.comments.map((comment) => (
-              <CommentDetails key={comment.commentId} comment={comment} onCommentUpdated={() => onAnswerUpdated()}/>
+              <CommentDetails
+                key={comment.commentId}
+                comment={comment}
+                onCommentUpdated={() => onAnswerUpdated()}
+                setIsExpanded={setIsExpanded}
+              />
             ))}
           </Box>
         </Collapse>
+
+        {/* Post Comment Section */}
+        {isCommenting && userId && (
+          <PostComment
+            answerId={answer.answerId}
+            onCommentPosted={() => {
+              setIsCommenting(false); // Hide the comment box after posting
+              onAnswerUpdated(); // Refresh the answer details
+            }}
+            setIsCommenting={setIsCommenting}
+          />
+        )}
+
         <EditAnswerModal
           open={isEditModalOpen}
           onClose={handleEditModalClose}

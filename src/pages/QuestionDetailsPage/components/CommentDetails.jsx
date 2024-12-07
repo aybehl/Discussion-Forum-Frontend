@@ -3,8 +3,9 @@ import AuthorAvatar from "../../../components/AuthorAvatar";
 import ContentHeader from './../../../components/ContentHeader';
 import CommentActions from "./CommentActions";
 import { useState } from "react";
+import { voteContent } from "../../../api/votes";
 
-const CommentDetails = ({ comment, onCommentUpdated }) => {
+const CommentDetails = ({ comment, onCommentUpdated, setIsExpanded }) => {
   const userId = sessionStorage.getItem("userId");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -23,6 +24,7 @@ const CommentDetails = ({ comment, onCommentUpdated }) => {
       });
 
       onCommentUpdated();
+      setIsExpanded(true);
     } catch (error) {
       console.error("Error upvoting comment:", error);
     }
@@ -42,6 +44,7 @@ const CommentDetails = ({ comment, onCommentUpdated }) => {
       });
 
       onCommentUpdated();
+      setIsExpanded(true);
     } catch (error) {
       console.error("Error downvoting comment:", error);
     }
@@ -70,7 +73,6 @@ const CommentDetails = ({ comment, onCommentUpdated }) => {
         display: "flex",
         gap: "1rem",
         alignItems: "flex-start",
-        marginBottom: "1rem",
       }}
     >
       <AuthorAvatar

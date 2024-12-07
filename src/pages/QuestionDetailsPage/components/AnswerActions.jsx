@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import IconWithCount from "../../../components/IconWithCount";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -18,7 +18,8 @@ const AnswerActions = ({
   onDelete,
   isDisabled,
   isExpanded,
-  setIsExpanded
+  setIsExpanded,
+  setIsCommenting,
 }) => {
   const userVote = votes.userVote;
 
@@ -52,15 +53,36 @@ const AnswerActions = ({
         <IconButton
           onClick={handleToggleExpand}
           sx={{
-            transform: !isDisabled && isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+            transform:
+              !isDisabled && isExpanded ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.3s ease",
             color: "gray.light",
             p: 0,
             cursor: isDisabled ? "not-allowed" : "pointer",
           }}
         >
-          <ExpandMoreIcon/>
+          <ExpandMoreIcon />
         </IconButton>
+
+        <Typography
+          onClick={isDisabled? null: () => setIsCommenting(true)}
+          sx={{
+            cursor: "pointer",
+            fontSize: "0.875rem",
+            fontWeight: "500",
+            color: isDisabled ? "gray.dark" : "gray.light",
+            cursor: isDisabled ? "not-allowed" : "pointer",
+            "&:hover": !isDisabled && {
+              color: "primary.main",
+              textDecoration: "underline",
+            },
+            borderLeft: "1px solid",
+            borderColor: "gray.dark",
+            paddingLeft: "0.5rem",
+          }}
+        >
+          Comment
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -96,7 +118,7 @@ const AnswerActions = ({
           onBookmark={() => console.log("Bookmark Answer Clicked")}
           onReport={() => console.log("Report Answer Clicked")}
           bookmarkText={"Bookmark Answer"}
-          reportText = {"Report Answer"}
+          reportText={"Report Answer"}
           disabled={isDisabled}
         />
       </Box>
