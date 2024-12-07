@@ -8,23 +8,24 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import ProfilePictureUpload from "./ProfilePictureUpload";
-import TextInput from "./TextInput";
-import BioInput from "./BioInput";
-import ErrorMessage from "./ErrorMessage"; // Optional
-import CustomButton from "../../components/CustomButton";
-import { editUserProfile } from "../../api/user";
-import { useUser } from "../../contexts/UserProvider";
+import ProfilePictureUpload from "./../../ProfileSetupPage/components/ProfilePictureUpload";
+import TextInput from "./../../ProfileSetupPage/components/TextInput";
+import BioInput from "./../../ProfileSetupPage/components/BioInput";
+import ErrorMessage from "./../../ProfileSetupPage/components/ErrorMessage";
+import CustomButton from "../../../components/CustomButton";
+import { editUserProfile } from "../../../api/user";
+import { useUser } from "../../../contexts/UserProvider";
 
 const EditProfileModal = ({ open, onClose }) => {
-  const { user, login } = useUser();
+  const { user } = useUser();
+
   const [profileData, setProfileData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     userName: user?.userName || "",
     email: user?.email || "",
     bio: user?.bio || "",
-    profilePicture: null,
+    profilePicture: user?.profilePicture || null,
   });
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,7 +41,6 @@ const EditProfileModal = ({ open, onClose }) => {
       const response = await editUserProfile(userId, profileData);
 
       if (response.status === "SUCCESS" && response.statusCode === 200) {
-        await login(sessionStorage.getItem("jwtToken"));
         onClose(); // Close the modal after successful update
       } else if (response.status === "ERROR") {
         setErrorMessage(response.message);

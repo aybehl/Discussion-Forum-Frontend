@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Avatar, Button } from "@mui/material";
 import { useUser } from "../../../contexts/UserProvider";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,7 +13,6 @@ const EditProfileSection = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleEditProfile = () => {
-    console.log("Button clciked");
     setIsEditModalOpen(true);
   };
 
