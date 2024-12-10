@@ -25,7 +25,12 @@ const QuestionBody = ({ question }) => {
           color: "gray.light",
         }}
       >
-        {question.body}
+        {question.body.split("\n").map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            <br />
+          </React.Fragment>
+        ))}
       </Typography>
     </Box>
   );

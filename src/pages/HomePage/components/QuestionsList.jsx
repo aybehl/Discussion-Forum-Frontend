@@ -47,7 +47,6 @@ const QuestionsList = () => {
   }, [currentPage, selectedTag]);
 
   const handleFilterChange = (event) => {
-    console.log("event - ", event);
     setSelectedTag(event.target.value);
     setCurrentPage(0);
   };
