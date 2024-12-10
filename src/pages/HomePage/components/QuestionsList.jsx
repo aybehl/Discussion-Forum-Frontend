@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, IconButton } from "@mui/material";
+import { KeyboardArrowDown } from "@mui/icons-material";
 import FiltersAndActions from "./FiltersAndActions";
 import QuestionItem from "./QuestionItem";
 import { getAllQuestions, getQuestionsByTags } from "../../../api/questions";
@@ -8,15 +9,18 @@ import AskQuestionModal from "./AskQuestionModal";
 
 const QuestionsList = () => {
   const pageSize = 6;
+
   // State for questions and filtering
   const [questions, setQuestions] = useState([]);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
 
-  // State for pagination and modal
+  // State for pagination, modal, and sorting
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" });
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -32,9 +36,10 @@ const QuestionsList = () => {
                 pageSize
               );
 
-        setQuestions((prevQuestions) =>
-          currentPage === 0 ? data.content : [...prevQuestions, ...data.content]
-        );
+        const newQuestions =
+          currentPage === 0 ? data.content : [...questions, ...data.content];
+        setQuestions(newQuestions);
+        setFilteredQuestions(newQuestions); // Reset filteredQuestions
         setIsLastPage(data.last);
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -54,6 +59,33 @@ const QuestionsList = () => {
   const handleLoadMore = () => {
     if (!isLastPage) setCurrentPage((prevPage) => prevPage + 1);
   };
+
+  const handleSort = (column) => {
+    const direction =
+      sortConfig.column === column && sortConfig.direction === "asc"
+        ? "desc"
+        : "asc";
+
+    setSortConfig({ column, direction });
+
+    const sortedQuestions = [...filteredQuestions].sort((a, b) => {
+      if (column === "likes") {
+        return direction === "asc" ? a.upvotes - b.upvotes : b.upvotes - a.upvotes;
+      } else if (column === "replies") {
+        return direction === "asc" ? a.noOfReplies - b.noOfReplies : b.noOfReplies - a.noOfReplies;
+      } else if (column === "postedOn") {
+        return direction === "asc"
+          ? new Date(a.createdAt) - new Date(b.createdAt)
+          : new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return 0;
+    });
+
+    setFilteredQuestions(sortedQuestions);
+  };
+
+  const getIconRotation = (column) =>
+    sortConfig.column === column && sortConfig.direction === "desc" ? 180 : 0;
 
   return (
     <Box
@@ -84,17 +116,53 @@ const QuestionsList = () => {
         <Typography variant="body2" fontWeight="bold" sx={{ pl: 3 }}>
           Question
         </Typography>
-        <Typography variant="body2" fontWeight="bold" textAlign="center">
-          Likes
-        </Typography>
-        <Typography variant="body2" fontWeight="bold" textAlign="center">
-          Replies
-        </Typography>
-        <Typography variant="body2" fontWeight="bold" textAlign="center">
-          Posted On
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Typography variant="body2" fontWeight="bold">
+            Likes
+          </Typography>
+          <IconButton onClick={() => handleSort("likes")}>
+            <KeyboardArrowDown
+              sx={{
+                transition: "transform 0.3s ease",
+                transform: `rotate(${getIconRotation("likes")}deg)`,
+                color: "common.white",
+                fontSize: "1rem"
+              }}
+            />
+          </IconButton>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Typography variant="body2" fontWeight="bold">
+            Replies
+          </Typography>
+          <IconButton onClick={() => handleSort("replies")}>
+            <KeyboardArrowDown
+              sx={{
+                transition: "transform 0.3s ease",
+                transform: `rotate(${getIconRotation("replies")}deg)`,
+                color: "common.white",
+                fontSize: "1rem"
+              }}
+            />
+          </IconButton>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Typography variant="body2" fontWeight="bold">
+            Posted On
+          </Typography>
+          <IconButton onClick={() => handleSort("postedOn")}>
+            <KeyboardArrowDown
+              sx={{
+                transition: "transform 0.3s ease",
+                transform: `rotate(${getIconRotation("postedOn")}deg)`,
+                color: "common.white",
+                fontSize: "1rem"
+              }}
+            />
+          </IconButton>
+        </Box>
       </Box>
-      {questions.map((question) => (
+      {filteredQuestions.map((question) => (
         <QuestionItem key={question.questionId} question={question} />
       ))}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
@@ -121,6 +189,7 @@ const QuestionsList = () => {
         onClose={() => setIsModalOpen(false)}
         onQuestionPosted={(newQuestion) => {
           setQuestions((prevQuestions) => [newQuestion, ...prevQuestions]); // Prepend the new question
+          setFilteredQuestions((prevQuestions) => [newQuestion, ...prevQuestions]);
           setIsLastPage(false); // Reset pagination flag if needed
         }}
       />
