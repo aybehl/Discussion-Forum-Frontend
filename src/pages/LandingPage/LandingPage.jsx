@@ -13,9 +13,15 @@ const LandingPage = () => {
       display: 'flex', 
       flexDirection: 'column', 
       minHeight: '100vh',
-      //backgroundColor: 'secondary.main',
-      background: `linear-gradient(135deg, ${theme.palette.gray.darkest} 30%, ${theme.palette.common.black} 90%)`,
+      // background: `linear-gradient(135deg, ${theme.palette.gray.darkest} 30%, ${theme.palette.common.black} 90%)`,
       color: 'common.white',
+      backgroundImage: `
+      linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), 
+      url(./landingPage3.jpg)
+    `,
+      backgroundSize: 'cover', 
+      backgroundPosition: 'center', 
+      backgroundRepeat: 'no-repeat', 
       }}>
       <Header variant="landing"/>
       <Box

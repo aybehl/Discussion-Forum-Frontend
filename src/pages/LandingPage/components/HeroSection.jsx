@@ -9,7 +9,7 @@ const HeroSection = () => (
       alignItems: 'center',
       gap: 4,
       mb: 10, 
-      px: 2 
+      px: 2,
     }}>
     <Box 
       sx={{
@@ -21,9 +21,7 @@ const HeroSection = () => (
       <Typography variant="h3" component="h1" gutterBottom>
         Welcome to <strong>"Fit.Connect"</strong> – The Ultimate Fitness Discussion Forum!
       </Typography>
-      <Typography variant="h6" component="p" gutterBottom sx={{
-        color: 'gray.main'
-      }}>
+      <Typography variant="h6" component="p" gutterBottom>
         Join a community of fitness enthusiasts, share knowledge, and get personalized advice!
       </Typography>
     </Box>
